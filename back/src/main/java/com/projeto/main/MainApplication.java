@@ -1,13 +1,13 @@
-package com.projeto.buscashop.projeto;
+package com.projeto.main;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProjetoApplication {
+public class MainApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProjetoApplication.class, args);
+		SpringApplication.run(MainApplication.class, args);
 	}
 
 }
