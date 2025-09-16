@@ -1,4 +1,40 @@
+@font-face {
+    font-family: "MontSerrat";
+    src: url("/assets/Montserrat-Regular.ttf");
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    font-family: "MontSerrat";
+    font-weight: 600;
+}
+header{
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    background-color: #F5F5F5;
+}
+
 main{
     text-align: center;
     margin-top: 150px;
+}
+main form{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+main form input{
+    padding: 5px;
+    border-radius: 10vh;
+    background-color:#ebeaea;
+    border:none;
+}
+.search{
+    margin-left: 5px;
+    padding: 5px;
+    background-color: #ebeaea;
+    border-radius: 2vh;
+    width: fit-content;
 }
