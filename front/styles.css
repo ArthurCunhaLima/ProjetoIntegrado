@@ -14,18 +14,17 @@ header{
     align-self: center;
     justify-content: center;
     background-color: #F5F5F5;
-}
-
-main{
     text-align: center;
-    margin-top: 150px;
 }
-main form{
+header .logo{
+    height: auto;
+}
+header form{
     display: flex;
-    flex-direction: row;
     justify-content: center;
+    align-self: center;
 }
-main form input{
+header form input{
     padding: 5px;
     border-radius: 10vh;
     background-color:#ebeaea;
