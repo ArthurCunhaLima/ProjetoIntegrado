@@ -10,30 +10,41 @@
     font-weight: 600;
 }
 header{
-    display: flex;
-    align-self: center;
-    justify-content: center;
     background-color: #F5F5F5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     text-align: center;
 }
 header .logo{
     height: auto;
+    margin-left: 50px;
+
 }
 header form{
     display: flex;
     justify-content: center;
     align-self: center;
+    flex: 1;
 }
 header form input{
-    padding: 5px;
-    border-radius: 10vh;
     background-color:#ebeaea;
+    padding: 5px;
+    border-radius: 20px;
     border:none;
+    width: 500px;
 }
 .search{
+    background-color: #ebeaea;
     margin-left: 5px;
     padding: 5px;
-    background-color: #ebeaea;
-    border-radius: 2vh;
-    width: fit-content;
+    border-radius: 20px;
+    border: none;
+    transition: 1s;
+    outline: none;
+}
+.search:hover{
+    transform: scale(0.9);
+    cursor: pointer;
+    border: 2px solid #000;
 }
