@@ -1,12 +1,12 @@
 @font-face {
-    font-family: "MontSerrat";
+    font-family: "Montserrat";
     src: url("/assets/Montserrat-Regular.ttf");
 }
 
 *{
     padding: 0;
     margin: 0;
-    font-family: "MontSerrat";
+    font-family: "Montserrat";
     font-weight: 600;
 }
 header{
@@ -29,7 +29,8 @@ header form input{
     padding: 5px;
     border-radius: 20px;
     border:none;
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
 }
 .search{
     background-color: #ebeaea;
@@ -45,18 +46,37 @@ header form input{
     cursor: pointer;
     border: 2px solid #000;
 }
-.logoLoja{
-    width: 100px;
-    height: 100px;
+main img{
+    width: 20vh;
 }
-.produtosLista{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+ul{
+    list-style: none;
 }
-
-.produtosLista .produto{
+.Resultados{
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+.Loja{
+    margin: 100px;
+    background-color: #ebeaea;
+    padding: 5vh;
+    border-radius: 20px;
+    text-align: center;
+}
+.ItemsResultados{
+    gap: 20px;
+}
+.item{
+    padding: 20px;
+    background-color: white;
+    border-radius: 25px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
     flex-direction: row;
+    align-items: center;
+}
+.item img{
+    border-radius: 30px;
 }
