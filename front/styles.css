@@ -8,6 +8,7 @@
     margin: 0;
     font-family: "Montserrat";
     font-weight: 600;
+    
 }
 header{
     display: flex;
@@ -17,6 +18,8 @@ header{
 }
 header .logo{
     margin-left: 50px;
+    width: 150px;
+    height: 150px;
 }
 header form{
     display: flex;
@@ -24,9 +27,9 @@ header form{
     align-self: center;
     flex: 1;
 }
-header form input{
+.barraPesquisa{
     background-color:#ebeaea;
-    padding: 5px;
+    padding: 10px;
     border-radius: 20px;
     border:none;
     width: 100%;
@@ -48,9 +51,15 @@ header form input{
 }
 main img{
     width: 20vh;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+main img,.Loja,.search,.barraPesquisa,.item{
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 ul{
     list-style: none;
+
 }
 .Resultados{
     display: flex;
@@ -63,15 +72,17 @@ ul{
     padding: 5vh;
     border-radius: 20px;
     text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
 }
 .ItemsResultados{
     gap: 20px;
 }
 .item{
     margin: 25px;
-    padding: 20px;
+    padding: 25px;
     background-color: white;
-    border-radius: 25px;
+    border-radius: 50px;
     display: flex;
     text-align: center;
     justify-content: center;
@@ -80,4 +91,7 @@ ul{
 }
 .item img{
     border-radius: 30px;
+}
+.NomeItem,.Valor{
+    margin: 5px;
 }
