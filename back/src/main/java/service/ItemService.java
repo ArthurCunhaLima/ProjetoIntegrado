@@ -2,7 +2,7 @@ package service;
 
 
 import repository.ItemRepository;
-import repository.model.Item;
+import model.Item;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 public class ItemService {
     private final ItemRepository itemRepository;
 
-    public ItemService (Item item, ItemRepository itemRepository){
+    public ItemService (ItemRepository itemRepository){
         this.itemRepository = itemRepository;
     }
 

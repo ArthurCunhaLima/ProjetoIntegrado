@@ -1,4 +1,4 @@
-package repository.model;
+package model;
 
 
 import jakarta.persistence.Entity;
