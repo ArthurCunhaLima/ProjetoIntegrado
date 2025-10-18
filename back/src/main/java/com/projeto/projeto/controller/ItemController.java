@@ -1,14 +1,14 @@
-package controller;
+package com.projeto.projeto.controller;
 
 
 import org.springframework.web.bind.annotation.*;
-import model.Item;
-import service.ItemService;
+import com.projeto.projeto.model.Item;
+import com.projeto.projeto.service.ItemService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/itens")
+@RequestMapping("/item")
 public class ItemController {
     private final ItemService itemService;
 
@@ -19,12 +19,11 @@ public class ItemController {
 
     @GetMapping("/retornar")
     public List<Item> retornarItens(){
-        return itemService.retornarItem();
+        return itemService.retornarItens();
     }
 
     @PostMapping("/adicionar")
     public Item adicionarItem(@RequestBody Item item){
         return itemService.adicionarItem(item.getNome(),item.getValor());
     }
-
 }

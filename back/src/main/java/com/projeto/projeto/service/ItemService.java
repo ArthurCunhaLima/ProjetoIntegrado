@@ -1,8 +1,8 @@
-package service;
+package com.projeto.projeto.service;
 
 
-import repository.ItemRepository;
-import model.Item;
+import com.projeto.projeto.repository.ItemRepository;
+import com.projeto.projeto.model.Item;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class ItemService {
         return itemRepository.save(itemAdicionar);
     }
 
-    public List<Item> retornarItem(){
+    public List<Item> retornarItens(){
         return itemRepository.findAll();
     }
 
