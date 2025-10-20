@@ -18,13 +18,20 @@ public class PedidoService {
     }
 
 
-    public String AddItem(Item item, long idPedido){
+    public String AdicionarItem(Item item, long idPedido){
         Optional<Pedido> pedido = pedidoRepository.findById(idPedido);
 
         if (pedido.isPresent()){
             return pedido.get().adicionarItem(item);
         }else {
             throw new RuntimeException("Pedido não encontrado");
+        }
+    }
+    public String RemoverItem(Item item, long idPedido){
+        Optional<Pedido> pedido = pedidoRepository.findById(idPedido);
+
+        if (pedido.isPresent()){
+            return pedido.get().
         }
     }
 
