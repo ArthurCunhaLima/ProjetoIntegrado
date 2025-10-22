@@ -31,7 +31,6 @@ public class PedidoService {
         Optional<Pedido> pedido = pedidoRepository.findById(idPedido);
 
         if (pedido.isPresent()){
-            return pedido.get().
         }
     }
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criação de Cardápio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/front/style.css">
+</head>
+<body>
+    <main>
+        <div class="titulo">
+            <h1>Criação de Cardápio</h1>
+            <h2>Adicione os itens para compor o cardápio do seu estabelecimento!</h2>
+        </div>
+        <!--COLOCAR O ENDPOINT -->
+        <form action="/endpoint" method="post" class="classeInputs">
+            <label for="">*Nome:</label>
+            <input type="text" name="nome" required >
+            <label for="">*Valor:</label>
+            <input type="number" name="valor" step="0.01" min="0" required>
+            <label for="">Descrição:</label>
+            <input type="text">
+            <input type="image" src="/assets/plus.png" alt="Enviar">
+        </form>
+        <ul>
+
+
+
+
+        </ul>
+
+    </main>
+
+
+</body>
+</html>

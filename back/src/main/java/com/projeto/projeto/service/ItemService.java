@@ -16,9 +16,7 @@ public class ItemService {
     }
 
     public Item adicionarItem(String nome,float valor){
-        Item itemAdicionar = new Item();
-        itemAdicionar.setNome(nome);
-        itemAdicionar.setValor(valor);
+        Item itemAdicionar = new Item(nome,valor);
         return itemRepository.save(itemAdicionar);
     }
 

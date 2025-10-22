@@ -60,6 +60,6 @@ public class Pedido {
 
     public String removerItem(Item item,long id){
         this.itensPedido.remove(id-1);
-        return "Item removido com sucesso"
+        return "Item removido com sucesso";
     }
 }

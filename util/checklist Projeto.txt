@@ -1,0 +1,11 @@
+o que falta fazer -
+
+Estruturar toda o armazenamento de pedidos 
+
+fazer o frontend 
+
+fazer os documentos 
+
+
+
+página MenuCreator vai ser o seguinte: o JavaScript vai ficar dando refresh na API e mostrar os itens já criados

@@ -1,0 +1,18 @@
+*{
+    font-weight: bold;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type=image]{
+  height: 20px;
+  width: 20px;
+}
+.classeInputs{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+}
