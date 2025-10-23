@@ -14,5 +14,21 @@ input[type=image]{
   display: flex;
   align-items: center;
   flex-direction: column;
-
+}
+label{
+  align-self: flex-start;
+}
+form{
+  background-color: #F8F9FA;
+  padding: 20px;
+  border-radius: 20px;
+}
+form input{
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 5px;
+  padding: 2px;
+}
+input:focus, button:focus {
+  border-color: #6C757D;
 }

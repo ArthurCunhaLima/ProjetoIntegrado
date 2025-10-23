@@ -27,11 +27,12 @@ public class PedidoService {
             throw new RuntimeException("Pedido não encontrado");
         }
     }
-    public String RemoverItem(Item item, long idPedido){
-        Optional<Pedido> pedido = pedidoRepository.findById(idPedido);
-
-        if (pedido.isPresent()){
-        }
-    }
+    //public String RemoverItem(Item item, long idPedido){
+    //    Optional<Pedido> pedido = pedidoRepository.findById(idPedido);
+    //    /// esse return tão errado
+    //    if (pedido.isPresent()){
+    //        return "";
+    //    } return "";
+    //}
 
 }

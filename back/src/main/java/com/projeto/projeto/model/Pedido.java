@@ -1,16 +1,17 @@
 package com.projeto.projeto.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private List<Item> itensPedido;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Item> itensPedido = new ArrayList<>();
     private float valorTotal;
     private float valorEntrega;
     private float valorItens;
