@@ -54,13 +54,5 @@ public class Pedido {
     public void setItensPedido(List<Item> itensPedido) {
         this.itensPedido = itensPedido;
     }
-    public String adicionarItem(Item item){
-        this.itensPedido.add(item);
-        return "Item adicionado com sucesso";
-    }
 
-    public String removerItem(Item item,long id){
-        this.itensPedido.remove(id-1);
-        return "Item removido com sucesso";
-    }
 }

@@ -22,17 +22,19 @@ public class PedidoService {
         Optional<Pedido> pedido = pedidoRepository.findById(idPedido);
 
         if (pedido.isPresent()){
-            return pedido.get().adicionarItem(item);
+            pedido.get().getItensPedido().add(item);
+            return "Item adicionado com sucesso";
         }else {
             throw new RuntimeException("Pedido não encontrado");
         }
     }
-    //public String RemoverItem(Item item, long idPedido){
-    //    Optional<Pedido> pedido = pedidoRepository.findById(idPedido);
-    //    /// esse return tão errado
-    //    if (pedido.isPresent()){
-    //        return "";
-    //    } return "";
-    //}
+
+    public String RemoverItem(Item item, long idPedido){
+        Optional<Pedido> pedido = pedidoRepository.findById(idPedido);
+        if (pedido.isPresent()){
+            pedido.get().getItensPedido().remove(item);
+            return "item removido com sucesso";
+        } throw new RuntimeException("Pedido não encontrado");
+    }
 
 }
