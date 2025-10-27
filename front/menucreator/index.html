@@ -14,13 +14,16 @@
             <h2>Adicione os itens para compor o cardápio do seu estabelecimento!</h2>
         </div>
         <!--COLOCAR O ENDPOINT -->
-        <form action="/endpoint" method="post" class="classeInputs">
+        <form action="" method="post" class="classeInputs" id="Inputs">
             <label for="">Nome</label>
             <input type="text" name="nome" required >
+
             <label for="">Valor</label>
-            <input type="number" name="valor" step="0.01" min="0" required>
+            <input type="number" name="valor" id="valor" step="0.01" min="0" required>
+            
             <label for="">Descrição</label>
             <input type="text">
+            
             <button type="submit">Adicionar Item</button>
         </form>
         <ul>
@@ -30,6 +33,9 @@
         </ul>
 
     </main>
+    <script src="main.js">
+
+    </script>
 
 
 </body>
