@@ -29,6 +29,7 @@ form input,form button{
   outline: none;
   border-radius: 5px;
   padding: 2px;
+  width: 300px;
 }
 input:focus, button:focus {
   border-color: #6C757D;

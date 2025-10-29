@@ -7,6 +7,7 @@ import com.projeto.projeto.service.ItemService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/item")
 public class ItemController {

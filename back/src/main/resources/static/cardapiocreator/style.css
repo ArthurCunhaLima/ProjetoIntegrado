@@ -1,0 +1,48 @@
+*{
+    font-weight: bold;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type=image]{
+  height: 20px;
+  width: 20px;
+}
+.classeInputs{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+label{
+  align-self: flex-start;
+}
+form{
+  gap:5px;
+  background-color: #F8F9FA;
+  padding: 20px;
+  border-radius: 20px;
+}
+form input,form button{
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 5px;
+  padding: 2px;
+  width: 300px;
+}
+input:focus, button:focus {
+  border-color: #6C757D;
+}
+form button{
+  padding: 5px;
+  margin: 5px;
+  background-color: #F8F9FA;
+  transition: all 0.3s ease
+  
+}
+form button:hover{
+  cursor: pointer;
+  transform: scale(1.08); 
+  background-color: #CED4DA;
+}

@@ -1,0 +1,19 @@
+main{
+    justify-content: center;
+}
+.botao{
+    padding: 15px 25px;
+    font-weight: bold;
+    background-color: #343A40;
+    width: fit-content;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease
+}
+.botao:hover{
+    transform: scale(1.08); 
+    background-color: #212529;
+}
+.botao a{
+    text-decoration: none;
+}
