@@ -25,6 +25,6 @@ public class ItemController {
 
     @PostMapping("/adicionar")
     public Item adicionarItem(@RequestBody Item item){
-        return itemService.adicionarItem(item.getNome(),item.getValor());
+        return itemService.adicionarItem(item.getNome(),item.getValor(),item.getDescricao());
     }
 }

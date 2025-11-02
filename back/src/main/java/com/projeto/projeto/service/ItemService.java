@@ -15,8 +15,8 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public Item adicionarItem(String nome,float valor){
-        Item itemAdicionar = new Item(nome,valor);
+    public Item adicionarItem(String nome, float valor, String descricao){
+        Item itemAdicionar = new Item(nome,valor,descricao);
         return itemRepository.save(itemAdicionar);
     }
 

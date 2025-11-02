@@ -14,6 +14,7 @@ public class Item {
 
     private String nome;
     private float valor;
+    private String descricao;
 
     public Item() {}
 
@@ -21,14 +22,25 @@ public class Item {
         this.nome = nome;
         this.valor = valor;
     }
-
-
+    public Item(String nome,float valor,String descricao){
+        this.nome = nome;
+        this.valor = valor;
+        this.descricao = descricao;
+    }
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
 

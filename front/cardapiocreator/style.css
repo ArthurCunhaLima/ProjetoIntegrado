@@ -1,5 +1,6 @@
 *{
-    font-weight: bold;
+  font-size: 15px;
+  font-weight: bold;
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -45,4 +46,11 @@ form button:hover{
   cursor: pointer;
   transform: scale(1.08); 
   background-color: #CED4DA;
+}
+ul li{
+  list-style: none;
+  background-color: white;
+  border-radius: 20px;
+  margin:10px;
+  padding: 5px;
 }

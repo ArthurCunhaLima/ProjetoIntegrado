@@ -5,7 +5,8 @@ document.getElementById("Inputs").addEventListener("submit", async (e) => {
     const form = e.target;
     const dados = {
         nome: form.nome.value,
-        valor: parseFloat(form.valor.value)
+        valor: parseFloat(form.valor.value),
+        descricao: form.descricao.value
     };
 
     const response = await fetch("http://localhost:8080/item/adicionar", {
@@ -22,3 +23,29 @@ document.getElementById("Inputs").addEventListener("submit", async (e) => {
   return response.json()
 })
 });
+
+async function carregarItens() {
+  const response = await fetch("http://localhost:8080/item/retornar")
+  const itens = await response.json();
+
+  const ul = document.getElementById("itensCriados");
+  ul.innerHTML = "";
+
+  itens.forEach(item => {
+    const li = document.createElement("li");
+    if (item.descricao == null){
+      li.innerHTML = `<strong>${item.nome}</strong> - R$ ${item.valor.toFixed(2)}<br>
+    `;
+    }else{
+      li.innerHTML = `<strong>${item.nome}</strong> - R$ ${item.valor.toFixed(2)}<br>
+      <small>${item.descricao}</small>
+    `;
+    }
+
+    ul.appendChild(li);
+
+  });
+  
+}
+
+carregarItens();
