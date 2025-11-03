@@ -32,6 +32,7 @@ async function carregarItens() {
   ul.innerHTML = "";
 
   itens.forEach(item => {
+    console.log("Renderizando:", item.nome);
     const li = document.createElement("li");
     if (item.descricao == null){
       li.innerHTML = `<strong>${item.nome}</strong> - R$ ${item.valor.toFixed(2)}<br>

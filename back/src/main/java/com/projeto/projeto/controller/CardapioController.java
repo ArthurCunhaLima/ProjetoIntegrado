@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/pedido")
+@RequestMapping("/cardapio")
 public class CardapioController {
     private final CardapioService cardapioService;
 
