@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", carregarItens);
 
 document.getElementById("Inputs").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -20,6 +21,7 @@ document.getElementById("Inputs").addEventListener("submit", async (e) => {
   if (!response.ok) {
     throw new Error("Erro na requisição: " + response.status);
   }
+  
   return response.json()
 })
 });
@@ -46,7 +48,6 @@ async function carregarItens() {
     ul.appendChild(li);
 
   });
-  
+ 
 }
-
 carregarItens();
