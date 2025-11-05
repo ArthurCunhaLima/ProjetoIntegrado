@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", carregarItens);
 
+let itensPendentes = [];
+
 document.getElementById("Inputs").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -10,21 +12,39 @@ document.getElementById("Inputs").addEventListener("submit", async (e) => {
         descricao: form.descricao.value
     };
 
+  itensPendentes.push(dados);
+
+  console.log("Item adicionado localmente:", dados);
+  console.log("Itens pendentes:", itensPendentes);
+
+  form.reset();
+  try {
     const response = await fetch("http://localhost:8080/item/adicionar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dados)
-    })
-    .then(response => {
-  if (!response.ok) {
-    throw new Error("Erro na requisição: " + response.status);
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dados)
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro na requisição: " + response.status);
+    }
+
+    await response.json();
+
+
+ 
+
+    
+    carregarItens();
+
+  } catch (error) {
+    console.error("Erro ao adicionar item:", error);
   }
-  
-  return response.json()
-})
 });
+
+
 
 async function carregarItens() {
   const response = await fetch("http://localhost:8080/item/retornar")

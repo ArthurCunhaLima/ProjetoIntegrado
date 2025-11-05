@@ -11,12 +11,27 @@ public class Cardapio {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
+    private String hexFundo;
+    private String hexTexto;
     private String url;
     private String nomeEstabelecimento;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Item> itensCardapio = new ArrayList<>();
+    private List<Item> itensCardapio;
 
+    public Cardapio(String hexFundo, String hexTexto, String url, String nomeEstabelecimento, List<Item> itensCardapio) {
+        this.hexFundo = hexFundo;
+        this.hexTexto = hexTexto;
+        this.url = url;
+        this.nomeEstabelecimento = nomeEstabelecimento;
+        this.itensCardapio = itensCardapio;
+    }
+
+    public Cardapio(String hexFundo, String hexTexto, String nomeEstabelecimento, List<Item> itensCardapio) {
+        this.hexFundo = hexFundo;
+        this.hexTexto = hexTexto;
+        this.nomeEstabelecimento = nomeEstabelecimento;
+        this.itensCardapio = itensCardapio;
+    }
 
     public long getId() {
         return id;
@@ -50,6 +65,19 @@ public class Cardapio {
         this.itensCardapio = itensCardapio;
     }
 
+    public String getHexFundo() {
+        return hexFundo;
+    }
 
+    public void setHexFundo(String hexFundo) {
+        this.hexFundo = hexFundo;
+    }
 
+    public String getHexTexto() {
+        return hexTexto;
+    }
+
+    public void setHexTexto(String hexTexto) {
+        this.hexTexto = hexTexto;
+    }
 }
