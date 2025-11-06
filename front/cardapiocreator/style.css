@@ -1,13 +1,15 @@
 *{
   font-size: 15px;
   font-weight: bold;
-  transition: all 0.4s ease;
+
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
-
+body{
+  transition: all 0.4s ease;
+}
 input[type=image]{
   height: 20px;
   width: 20px;
@@ -54,4 +56,8 @@ ul li{
   border-radius: 20px;
   margin:10px;
   padding: 15px;
+}
+input[type=color]{
+  width: 10vh;
+  height: 10vh;
 }

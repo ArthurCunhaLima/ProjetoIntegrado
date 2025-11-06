@@ -17,14 +17,24 @@ document.getElementById("Inputs").addEventListener("submit", async (e) => {
   console.log("Item adicionado localmente:", dados);
   console.log("Itens pendentes:", itensPendentes);
 
+  carregarItens();
+
+
   form.reset();
+});
+document.getElementById("gerarCardapio").addEventListener("click", async () => {
+  if (itensPendentes.length === 0) {
+    alert("Nenhum item para enviar!");
+    return;
+  }
+
   try {
     const response = await fetch("http://localhost:8080/item/adicionar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(dados)
+      body: JSON.stringify(itensPendentes)
     });
 
     if (!response.ok) {
@@ -32,8 +42,10 @@ document.getElementById("Inputs").addEventListener("submit", async (e) => {
     }
 
     await response.json();
-
-
+  
+    itensPendentes = [];
+  
+    alert("Cardápio gerado com sucesso!")
  
 
     
@@ -47,8 +59,7 @@ document.getElementById("Inputs").addEventListener("submit", async (e) => {
 
 
 async function carregarItens() {
-  const response = await fetch("http://localhost:8080/item/retornar")
-  const itens = await response.json();
+  const itens = itensPendentes;
 
   const ul = document.getElementById("itensCriados");
   ul.innerHTML = "";
