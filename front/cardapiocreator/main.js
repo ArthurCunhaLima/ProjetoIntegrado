@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", carregarItens);
 
 let itensPendentes = [];
 
-document.getElementById("Inputs").addEventListener("submit", async (e) => {
+document.getElementById("inputItem").addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const form = e.target;

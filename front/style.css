@@ -13,9 +13,9 @@ html,body{
 }
 main{
     gap: 50px;
-    background-color: #6C757D ;
+    background-color: #6C757D;
     min-height: 100vh;
-    display: flex;
+    display: flex; 
     flex-direction: column;
     text-align: center;
     align-items: center;
