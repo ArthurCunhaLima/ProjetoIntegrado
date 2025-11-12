@@ -22,19 +22,32 @@ document.getElementById("inputItem").addEventListener("submit", async (e) => {
 
   form.reset();
 });
-document.getElementById("gerarCardapio").addEventListener("click", async () => {
+document.getElementById("gerarCardapio").addEventListener("click", async (e) => {
+  e.preventDefault();
+
   if (itensPendentes.length === 0) {
     alert("Nenhum item para enviar!");
     return;
   }
 
+  const formEstabelecimento = document.getElementById("inputFinal");
+
+  const payload = {
+    nomeEstabelecimento: formEstabelecimento.nomeEstabelecimento.value,
+    hexFundo: formEstabelecimento.hexFundo.value,
+    hexTexto: formEstabelecimento.hexTexto.value,
+
+    itensCardapio: itensPendentes
+  };
+
+
   try {
-    const response = await fetch("http://localhost:8080/item/adicionar", {
+    const response = await fetch("http://localhost:8080/creator/gerarCardapio", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(itensPendentes)
+      body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
@@ -46,9 +59,9 @@ document.getElementById("gerarCardapio").addEventListener("click", async () => {
     itensPendentes = [];
   
     alert("Cardápio gerado com sucesso!")
- 
-
     
+
+    formEstabelecimento.reset()
     carregarItens();
 
   } catch (error) {

@@ -17,8 +17,15 @@ public class CardapioService {
         this.cardapioRepository = cardapioRepository;
     }
 
-    public Cardapio criarCardapio(String nomeEstabelecimento, String hexFundo, String hexTexto,List<Item> listaItem){
-        Cardapio novoCardapio = new Cardapio(nomeEstabelecimento,hexFundo,hexTexto,listaItem);
+    public Cardapio criarCardapio(Cardapio cardapio){
+        Cardapio novoCardapio = new Cardapio(cardapio.getNomeEstabelecimento()
+                ,cardapio.getHexFundo(),
+                cardapio.getHexTexto(),
+                cardapio.getItensCardapio());
         return cardapioRepository.save(novoCardapio);
     }
+    public List<Cardapio> retornar(){
+        return cardapioRepository.findAll();
+    }
+
 }

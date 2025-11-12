@@ -18,6 +18,10 @@ public class Cardapio {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Item> itensCardapio;
 
+
+
+    public Cardapio(){
+    }
     public Cardapio(String hexFundo, String hexTexto, String url, String nomeEstabelecimento, List<Item> itensCardapio) {
         this.hexFundo = hexFundo;
         this.hexTexto = hexTexto;
@@ -26,7 +30,7 @@ public class Cardapio {
         this.itensCardapio = itensCardapio;
     }
 
-    public Cardapio(String hexFundo, String hexTexto, String nomeEstabelecimento, List<Item> itensCardapio) {
+    public Cardapio(String nomeEstabelecimento, String hexFundo, String hexTexto, List<Item> itensCardapio) {
         this.hexFundo = hexFundo;
         this.hexTexto = hexTexto;
         this.nomeEstabelecimento = nomeEstabelecimento;

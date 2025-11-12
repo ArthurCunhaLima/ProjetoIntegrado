@@ -51,7 +51,38 @@ input[type=number],input[type=text]{
     transform 0.2s ease;
 }
 
-input[type=number]:focus,input[type=text]:focus {
+input[type=number]:focus,input[type=text]:focus,input[type=color]:focus {
+  outline: none;
+  border-color: #ADB5BD;
+  transform: scale(1.03);
+}
+input[type=color] {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1.5px solid #d0d5db;
+  border-radius: 8px;
+  width: 120px;
+  height: 40px;
+  padding: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+input[type=color]::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+input[type=color]::-moz-color-swatch {
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+input[type=color]:hover {
   outline: none;
   border-color: #ADB5BD;
   transform: scale(1.03);

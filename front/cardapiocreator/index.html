@@ -20,7 +20,7 @@
             
             
                 <label for="nome">Nome</label>
-                <input type="text" name="nome" id="nome" required>
+                <input type="text" name="nome" id="nome"  required>
                 <label for="valor">Valor</label>
                 <input type="number" name="valor" id="valor" step="0.01" min="0" required>
             
@@ -41,7 +41,7 @@
             <form method="post" class="inputsEstabelecimento" id="inputFinal">
 
                 <label for="">Nome do Restaurante</label>
-                <input type="text" name="nomeEstabelecimento">
+                <input type="text" name="nomeEstabelecimento">  
 
                 <label for="">Cor do fundo</label>
                 <input type="color" name="hexFundo" value="#000000">
@@ -49,13 +49,11 @@
                 <label for="">Cor do texto</label>
                 <input type="color" name="hexTexto" value="#ffffff">
 
-                <button type="submit" class="botaoEnviar">Gerar cardápio</button>
+                <button type="submit" class="botaoEnviar" id="gerarCardapio">Gerar cardápio</button>
             </form>
         </div>
     </main>
-    <script src="main.js">
-
-    </script>
+    <script src="main.js"></script>
 
 
 </body>

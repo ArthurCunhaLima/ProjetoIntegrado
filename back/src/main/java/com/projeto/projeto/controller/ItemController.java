@@ -8,6 +8,9 @@ import com.projeto.projeto.service.ItemService;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
+
+
+
 @RestController
 @RequestMapping("/item")
 public class ItemController {
@@ -23,8 +26,5 @@ public class ItemController {
         return itemService.retornarItens();
     }
 
-    @PostMapping("/adicionar")
-    public Item adicionarItem(@RequestBody Item item){
-        return itemService.adicionarItem(item.getNome(),item.getValor(),item.getDescricao());
-    }
+
 }
