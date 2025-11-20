@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", carregarItens);
 
+
 let itensPendentes = [];
 
 document.getElementById("inputItem").addEventListener("submit", async (e) => {

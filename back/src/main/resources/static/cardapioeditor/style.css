@@ -1,4 +1,16 @@
-.boxInput{
+body{
+  font-weight: 800;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.buscaConteudo{
+  width: fit-content;
+  justify-content: center;
+}
+.boxInput,.buscaConteudo{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -8,7 +20,7 @@
     margin: 10px;
     gap: 5px;
 }
-.inputsItem,.inputsEstabelecimento{
+.inputsItem,.inputsEstabelecimento,.formBusca{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,17 +34,19 @@
   border-radius: 10px;
   border: none; 
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.6);
-  transition: 0.25s ease-out;
+  transition: 0.25s ease-out;;
 
 }
 .botaoEnviar:hover{
   cursor: pointer;
   transform: scale(1.08);
   background-color: #ADB5BD;
-
 }
 input[type=number],input[type=text]{
+  border-radius: 5px;
+  border: 1.5px solid #d0d5db;
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.6);
+  padding: 3px;
   font-weight: 600;
   transition:
     border-color 0.3s ease,
@@ -44,13 +58,7 @@ input[type=number],input[type=text]{
 input[type=number]:focus,input[type=text]:focus,input[type=color]:focus {
   outline: none;
   border-color: #ADB5BD;
-  box-shadow: 0 0 0 3px #6C757D;
   transform: scale(1.03);
-}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }
 input[type=color] {
   appearance: none;
@@ -82,4 +90,7 @@ input[type=color]:hover {
   outline: none;
   border-color: #ADB5BD;
   transform: scale(1.03);
+}
+.conteudoEscondido{
+  display: none ;
 }

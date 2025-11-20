@@ -1,48 +1,90 @@
-*{
-    font-weight: bold;
+
+body{
+  font-weight: 800;
 }
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
-
-input[type=image]{
-  height: 20px;
-  width: 20px;
+.boxInput{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #DEE2E6;
+    border-radius: 50px;
+    padding: 20px;
+    margin: 10px;
+    gap: 5px;
 }
-.classeInputs{
+.inputsItem,.inputsEstabelecimento{
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px;
 }
-label{
-  align-self: flex-start;
-}
-form{
-  gap:5px;
-  background-color: #F8F9FA;
-  padding: 20px;
-  border-radius: 20px;
-}
-form input,form button{
-  border: 1px solid #ccc;
-  outline: none;
-  border-radius: 5px;
-  padding: 2px;
-  width: 300px;
-}
-input:focus, button:focus {
-  border-color: #6C757D;
-}
-form button{
+.botaoEnviar{
+  margin-top: 5px;
   padding: 5px;
-  margin: 5px;
-  background-color: #F8F9FA;
-  transition: all 0.3s ease
-  
+  font-weight: 800;
+  border-radius: 10px;
+  border: none; 
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.6);
+  transition: 0.25s ease-out;;
+
 }
-form button:hover{
+.botaoEnviar:hover{
   cursor: pointer;
-  transform: scale(1.08); 
-  background-color: #CED4DA;
+  transform: scale(1.08);
+  background-color: #ADB5BD;
+}
+input[type=number],input[type=text]{
+  border-radius: 5px;
+  border: 1.5px solid #d0d5db;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.6);
+  padding: 3px;
+  font-weight: 600;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+input[type=number]:focus,input[type=text]:focus,input[type=color]:focus {
+  outline: none;
+  border-color: #ADB5BD;
+  transform: scale(1.03);
+}
+input[type=color] {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1.5px solid #d0d5db;
+  border-radius: 8px;
+  width: 120px;
+  height: 40px;
+  padding: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+input[type=color]::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+input[type=color]::-moz-color-swatch {
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+input[type=color]:hover {
+  outline: none;
+  border-color: #ADB5BD;
+  transform: scale(1.03);
 }

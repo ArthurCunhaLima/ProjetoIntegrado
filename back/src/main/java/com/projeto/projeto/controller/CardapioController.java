@@ -28,4 +28,7 @@ public class CardapioController {
     public Cardapio buscarporNome(@RequestBody String nomeEstabelecimento){
         return cardapioService.buscarPorNome(nomeEstabelecimento);
     }
+
+
+
 }
