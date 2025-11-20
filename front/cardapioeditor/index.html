@@ -8,58 +8,60 @@
     <link rel="stylesheet" href="/front/style.css">
 </head>
 <body>
-    <div class="buscaConteudo" id="buscaConteudo">
-        <form method="get" id="formularioBusca" class="formBusca">
-            <label for="nomeBusca">Nome do Estabelecimento</label>
-            <input type="text">
-            <button type="submit" class="botaoEnviar">Buscar Cardápio</button>
-        </form>
-    </div>
-
-    <main id="conteudo" class="conteudoEscondido">
-        <div class="titulo">
-            <br>
-            <h1>Edição de Cárdapio</h1>
-            <h2>Adicione os itens para compor o cardápio do seu estabelecimento!</h2>
-        </div>
-        <div class="boxInput">
-            <h2>Preencha com os dados de cada item do seu cardápio</h2>
-            <form method="post" class="inputsItem" id="inputItem">
-            
-            
-                <label for="nome">Nome</label>
-                <input type="text" name="nome" id="nome"  required>
-                <label for="valor">Valor</label>
-                <input type="number" name="valor" id="valor" step="0.01" min="0" required>
-            
-                <label for="descricao">Descrição</label>
-                <input type="text" name="descricao" id="descricao">
-            
-                <button type="submit" class="botaoEnviar">Adicionar item</button>
+    <main>
+        <div class="buscaConteudo" id="buscaConteudo">
+            <form method="get" id="formularioBusca" class="formBusca">
+                <label for="nomeBusca">Nome do Estabelecimento</label>
+                <input type="text">
+                <button type="submit" class="botaoEnviar">Buscar Cardápio</button>
             </form>
         </div>
 
-        <ul id="itensCriados"></ul>
+        
+        <main id="conteudo" class="conteudoEscondido">
+            <div class="titulo">
+                <br>
+                <h1>Edição de Cárdapio</h1>
+                <h2>Adicione os itens para compor o cardápio do seu estabelecimento!</h2>
+            </div>
+            <div class="boxInput">
+                <h2>Preencha com os dados de cada item do seu cardápio</h2>
+                <form method="post" class="inputsItem" id="inputItem">
+                
+                
+                    <label for="nome">Nome</label>
+                    <input type="text" name="nome" id="nome"  required>
+                    <label for="valor">Valor</label>
+                    <input type="number" name="valor" id="valor" step="0.01" min="0" required>
+                
+                    <label for="descricao">Descrição</label>
+                    <input type="text" name="descricao" id="descricao">
+                
+                    <button type="submit" class="botaoEnviar">Adicionar item</button>
+                </form>
+            </div>
+
+            <ul id="itensCriados"></ul>
 
 
-        <div class="boxInput">
-            <h2>Informações do Estabelecimento</h2>
-            <h3>Preencha com as informações do seu estabelecimento</h3>
-            <form method="post" class="inputsEstabelecimento" id="inputFinal">
+            <div class="boxInput">
+                <h2>Informações do Estabelecimento</h2>
+                <h3>Preencha com as informações do seu estabelecimento</h3>
+                <form method="post" class="inputsEstabelecimento" id="inputFinal">
 
-                <label for="">Nome do Restaurante</label>
-                <input type="text" name="nomeEstabelecimento">  
+                    <label for="">Nome do Restaurante</label>
+                    <input type="text" name="nomeEstabelecimento">  
 
-                <label for="">Cor do fundo</label>
-                <input type="color" name="hexFundo" value="#000000">    
+                    <label for="">Cor do fundo</label>
+                    <input type="color" name="hexFundo" value="#000000">    
 
-                <label for="">Cor do texto</label>
-                <input type="color" name="hexTexto" value="#ffffff">
+                    <label for="">Cor do texto</label>
+                    <input type="color" name="hexTexto" value="#ffffff">
 
-                <button type="submit" class="botaoEnviar" id="gerarCardapio">Gerar cardápio</button>
-            </form>
-        </div>
-    </main>
+                    <button type="submit" class="botaoEnviar" id="gerarCardapio">Gerar cardápio</button>
+                </form>
+            </div>
+        </main>
     <script src="main.js"></script>
 
 
