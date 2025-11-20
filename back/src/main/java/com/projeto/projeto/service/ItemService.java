@@ -24,4 +24,16 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public Item removerItem(String nome) {
+        Item item = itemRepository.findByNome(nome);
+
+        if (item != null) {
+            itemRepository.delete(item);
+        }
+
+        return item;
+    }
+
+
+
 }

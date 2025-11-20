@@ -28,4 +28,9 @@ public class CardapioService {
         return cardapioRepository.findAll();
     }
 
+    public Cardapio buscarPorNome(String nomeEstabelecimento){
+        return cardapioRepository.findByNomeEstabelecimento(nomeEstabelecimento);
+    }
+
+
 }

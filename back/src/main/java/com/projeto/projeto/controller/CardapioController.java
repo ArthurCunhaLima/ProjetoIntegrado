@@ -4,10 +4,7 @@ package com.projeto.projeto.controller;
 import com.projeto.projeto.model.Cardapio;
 import com.projeto.projeto.repository.CardapioRepository;
 import com.projeto.projeto.service.CardapioService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,4 +24,8 @@ public class CardapioController {
         return cardapioService.retornar();
     }
 
+    @GetMapping("/buscar")
+    public Cardapio buscarporNome(@RequestBody String nomeEstabelecimento){
+        return cardapioService.buscarPorNome(nomeEstabelecimento);
+    }
 }
