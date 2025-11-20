@@ -11,7 +11,7 @@
         inicial.style.display = "none";
 
 
-        final.style.display = "block";
+        final.classList.remove("conteudoEscondido");
         carregarItens();
       });
 

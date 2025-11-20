@@ -6,7 +6,11 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
-.boxInput{
+.buscaConteudo{
+  width: fit-content;
+  justify-content: center;
+}
+.boxInput,.buscaConteudo{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -16,7 +20,7 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 10px;
     gap: 5px;
 }
-.inputsItem,.inputsEstabelecimento{
+.inputsItem,.inputsEstabelecimento,.formBusca{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,6 +91,6 @@ input[type=color]:hover {
   border-color: #ADB5BD;
   transform: scale(1.03);
 }
-main{
-  display: none;
+.conteudoEscondido{
+  display: none ;
 }
