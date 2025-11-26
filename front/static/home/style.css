@@ -2,7 +2,7 @@ main{
     justify-content: center;
 }
 .botao{
-    padding: 15px 25px;
+    padding: 10px ;
     font-weight: bold;
     background-color: #343A40;
     width: fit-content;
@@ -11,8 +11,7 @@ main{
     transition: all 0.3s ease
 }
 .botao:hover{
-    transform: scale(1.08); 
-    background-color: #212529;
+    transform: scale(1.08);
 }
 .botao a{
     text-decoration: none;

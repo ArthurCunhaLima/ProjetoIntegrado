@@ -1,6 +1,6 @@
 @font-face {
     font-family: "Inter";
-    src: url("/assets/Inter18pt.ttf");
+    src: url("static/assets/Inter18pt.ttf");
 }
 html,body{
     height: 100%;

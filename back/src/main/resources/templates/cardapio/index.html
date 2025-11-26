@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardápio</title>
-    <link rel="stylesheet" href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
     <h1>Nome do restaurante</h1>
     <ul class="Itens"></ul>
+    <p th:text="${cardapio}"></p>
 
 
 
 
 
-    <script src="main.js"></script>
+    <script th:inline="javascript">
+        let nome = /*[[${cardapio.nomeEstabelecimento}]]*/ "";
+        console.log(nome);
+    </script>
+    <script th:src="main.js"></script>
+
 </body>
 </html>

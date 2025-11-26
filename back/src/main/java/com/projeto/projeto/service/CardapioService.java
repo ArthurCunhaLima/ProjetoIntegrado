@@ -31,6 +31,12 @@ public class CardapioService {
     public Cardapio buscarPorNome(String nomeEstabelecimento){
         return cardapioRepository.findByNomeEstabelecimento(nomeEstabelecimento);
     }
+    public Cardapio obterCardapioPeloNomeUrl(String nomeCardapioUrl) {
+
+        String nomeFormatado = nomeCardapioUrl.replace("-", " ");
 
 
+        return cardapioRepository.findByNomeEstabelecimento(nomeFormatado);
+    }
 }
+
