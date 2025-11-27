@@ -29,6 +29,10 @@ public class  CardapioController {
         return cardapioService.buscarPorNome(nomeEstabelecimento);
     }
 
+    @GetMapping("retornar/nomes")
+    public List<String> retornarTodosNomesEstabelecimentos(){
+        return cardapioService.getAllNomesEstabelecimento();
+    }
 }
 
 

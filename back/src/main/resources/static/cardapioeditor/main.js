@@ -7,7 +7,26 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let itensPendentes = [];
     
-    // Buscar cardápio
+    carregarListaCardapios();
+
+
+    async function carregarListaCardapios() {
+      try {
+          const response = await fetch("http://localhost:8080/cardapio/config/retornar");
+          
+          if (response.ok) {
+              const cardapios = await response.json();
+              exibirListaCardapios(cardapios);
+          } else {
+              cardapiosList.innerHTML = '<p class="text-muted">Nenhum cardápio disponível</p>';
+          }
+      } catch (error) {
+          console.error("Erro ao carregar cardápios:", error);
+          cardapiosList.innerHTML = '<p class="text-danger">Erro ao carregar cardápios</p>';
+      }
+  }
+
+
     formulario.addEventListener("submit", async function(event) {
         event.preventDefault();
         

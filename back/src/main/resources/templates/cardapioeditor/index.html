@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edição de Cardápio</title>
+    <title>Editar Cardápio - MeuCardápio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/cardapioeditor/style.css}">
@@ -26,6 +26,16 @@
                             <i class="bi bi-search me-2"></i>Buscar Cardápio
                         </button>
                     </form>
+                    <div id="listaCardapios" class="mt-4">
+                        <h5 class="mb-3">
+                            <i class="bi bi-list-ul me-2"></i>Cardápios Disponíveis
+                        </h5>
+                        <div id="cardapiosList" class="list-group">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,7 +138,7 @@
         </div>
     </div>
 
-
+    <script th:src="@{/cardapioeditor/main.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
 </body>

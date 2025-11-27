@@ -38,5 +38,9 @@ public class CardapioService {
 
         return cardapioRepository.findByNomeEstabelecimento(nomeFormatado);
     }
+    public List<String> getAllNomesEstabelecimento(){
+        return cardapioRepository.findAllNomesEstabelecimento();
+    }
+
 }
 
