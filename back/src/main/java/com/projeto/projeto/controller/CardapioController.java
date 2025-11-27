@@ -19,12 +19,12 @@ public class  CardapioController {
         this.cardapioService = cardapioService;
     }
 
-    @GetMapping("/retornar")
+    @GetMapping("/config/retornar")
     public List<Cardapio> retornarCardapio(){
         return cardapioService.retornar();
     }
 
-    @GetMapping("/buscar")
+    @GetMapping("/config/buscar")
     public Cardapio buscarporNome(@RequestBody String nomeEstabelecimento){
         return cardapioService.buscarPorNome(nomeEstabelecimento);
     }

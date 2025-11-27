@@ -3,6 +3,7 @@ body {
     min-height: 100vh;
     padding-top: 20px;
     padding-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .card {
@@ -14,7 +15,7 @@ body {
 }
 
 .card-header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #2c3e50, #34495e);
     color: white;
     border-bottom: none;
     padding: 20px;
@@ -32,6 +33,20 @@ body {
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
 }
 
 .form-control, .form-select {
@@ -77,52 +92,39 @@ body {
     margin-bottom: 15px;
     color: #dee2e6;
 }
-#qrCodeImage {
-    border: 1px solid #dee2e6;
-    padding: 10px;
-    background: white;
+
+.search-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.modal-content {
-    border-radius: 15px;
-    overflow: hidden;
+.search-card {
+    max-width: 500px;
+    width: 100%;
 }
 
-.modal-header {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
-    color: white;
-}
-qrcode {
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-}
-
-#qrcode canvas {
-    border-radius: 4px;
-}
-
-.empty-state {
+.not-found {
     text-align: center;
-    padding: 2rem;
-    color: #6c757d;
+    padding: 40px 20px;
 }
 
-.empty-state i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    display: block;
+.not-found-icon {
+    font-size: 4rem;
+    color: #dc3545;
+    margin-bottom: 20px;
 }
 
-.btn {
-    transition: all 0.3s ease;
+.hidden {
+    display: none;
 }
 
-.item-card {
-    transition: transform 0.2s ease;
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
 }
 
-.item-card:hover {
-    transform: translateY(-2px);
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

@@ -26,10 +26,6 @@ public class CreatorController {
         return "home/index";
     }
 
-    @GetMapping("/cardapio")
-    public String cardapioPage(){
-        return "cardapio/index";
-    }
 
     @GetMapping("/cardapiocreator")
     public String cardapioCreatorPage(){
@@ -40,14 +36,15 @@ public class CreatorController {
     public String cardapioEditorPage(){
         return "cardapioeditor/index";
     }
-    @GetMapping("/{nomeEstabelecimento}")
+
+    @GetMapping("/cardapio/{nomeEstabelecimento}")
     public String getNomeCardapio(
             @PathVariable String nomeEstabelecimento,
             Model model) {
 
         String nomeFormatado = nomeEstabelecimento.replace("-", " ");
 
-
+            
         model.addAttribute("cardapio",
                 cardapioService.obterCardapioPeloNomeUrl(nomeEstabelecimento));
 
