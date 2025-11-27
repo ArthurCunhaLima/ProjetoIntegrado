@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="PT-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${cardapio.nomeEstabelecimento} + ' - Cardápio'">Cardápio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .cardapio-header {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .cardapio-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .cardapio-header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .categoria-section {
+            margin-bottom: 3rem;
+        }
+        
+        .categoria-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid;
+            display: inline-block;
+        }
+        
+        .item-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .item-card .card-body {
+            padding: 1.5rem;
+        }
+        
+        .item-nome {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: inherit;
+        }
+        
+        .item-preco {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+        
+        .item-descricao {
+            color: #6c757d;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+        
+        .categoria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .container-cardapio {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+
+
+        @media (max-width: 768px) {
+            .cardapio-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .categoria-title {
+                font-size: 1.7rem;
+            }
+            
+            .categoria-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .item-card .card-body {
+                padding: 1.25rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .cardapio-header {
+                padding: 2rem 0;
+            }
+            
+            .cardapio-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .categoria-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body th:style="'background-color:' + ${cardapio.hexFundo} + '; color:' + ${cardapio.hexTexto}">
+    
+
+
+    <header class="cardapio-header" th:style="'background: linear-gradient(135deg, ' + ${cardapio.hexFundo} + ', ' + ${cardapio.hexFundo} + 'cc)'">
+        <div class="container-cardapio">
+            <h1 th:text="${cardapio.nomeEstabelecimento}">Nome do Estabelecimento</h1>
+            <p class="subtitle">Cardápio Digital</p>
+        </div>
+    </header>
+
+    <main class="container-cardapio">
+        <div th:if="${cardapio?.itensCardapio != null and !cardapio.itensCardapio.empty}">
+            
+            <div class="categoria-section">
+                <h2 class="categoria-title" th:style="'border-bottom-color: ' + ${cardapio.hexTexto} + ';'">
+                    Itens
+                </h2>
+                
+                <div class="categoria-grid">
+                    <div th:each="item : ${cardapio.itensCardapio}">
+                        <div class="card item-card" 
+                            th:style="'background-color: ' + ${cardapio.hexFundo} + 
+                                '; color: ' + ${cardapio.hexTexto} + 
+                                '; border: 2px solid ' + ${cardapio.hexTexto} + '40;'">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h3 class="item-nome" th:text="${item.nome}">Nome do Item</h3>
+                                    <span class="item-preco" 
+                                          th:text="'R$ ' + ${#numbers.formatDecimal(item.valor, 1, 2, 'POINT')}">
+                                        R$ 0,00
+                                    </span>
+                                </div>
+                                <p class="item-descricao" 
+                                   th:if="${item.descricao != null and item.descricao != ''}"
+                                   th:text="${item.descricao}">
+                                    Descrição do item
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+        <div th:if="${cardapio?.itensCardapio == null or cardapio.itensCardapio.empty}" 
+             class="empty-state">
+            <i class="bi bi-journal-x"></i>
+            <h3>Cardápio em Atualização</h3>
+            <p>Nosso cardápio está passando por melhorias. Volte em breve!</p>
+        </div>
+    </main>
+
+
+
+
+    <footer class="mt-5 py-4 text-center" 
+            th:style="'background-color: ' + ${cardapio.hexFundo} + '; color: ' + ${cardapio.hexTexto} + '; border-top: 1px solid ' + ${cardapio.hexTexto} + '30;'">
+        <div class="container-cardapio">
+            <p class="mb-0">
+                <small>
+                    Cardápio digital gerado por <strong>MeuCardápio</strong> • 
+                    <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}">01/01/2024</span>
+                </small>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Adiciona animação suave aos cards
+            const cards = document.querySelectorAll('.item-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+            
+            // Ajusta o contraste para melhor legibilidade
+            function adjustContrast() {
+                const backgroundColor = document.body.style.backgroundColor;
+                const textColor = document.body.style.color;
+                
+                // Se as cores forem muito similares, ajusta automaticamente
+                if (backgroundColor && textColor) {
+                    // Remove o # das cores hex
+                    const hexFundo = backgroundColor.replace('#', '');
+                    const hexTexto = textColor.replace('#', '');
+                    
+                    // Converte para RGB
+                    const rFundo = parseInt(hexFundo.substr(0,2), 16);
+                    const gFundo = parseInt(hexFundo.substr(2,2), 16);
+                    const bFundo = parseInt(hexFundo.substr(4,2), 16);
+                    
+                    const rTexto = parseInt(hexTexto.substr(0,2), 16);
+                    const gTexto = parseInt(hexTexto.substr(2,2), 16);
+                    const bTexto = parseInt(hexTexto.substr(4,2), 16);
+                    
+                    // Calcula diferença de brilho (fórmula de luminosidade)
+                    const brightnessFundo = (rFundo * 299 + gFundo * 587 + bFundo * 114) / 1000;
+                    const brightnessTexto = (rTexto * 299 + gTexto * 587 + bTexto * 114) / 1000;
+                    
+                    const difference = Math.abs(brightnessFundo - brightnessTexto);
+                    
+                    // Se a diferença for muito pequena, ajusta automaticamente
+                    if (difference < 125) {
+                        document.body.style.color = brightnessFundo > 128 ? '#000000' : '#FFFFFF';
+                    }
+                }
+            }
+            
+            // Executa o ajuste de contraste
+            setTimeout(adjustContrast, 100);
+        });
+    </script>
+</body>
+</html>
