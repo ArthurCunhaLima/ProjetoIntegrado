@@ -3,7 +3,6 @@ package com.projeto.projeto.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +14,8 @@ public class Cardapio {
     private String hexTexto;
     private String url;
     private String nomeEstabelecimento;
+    private String hexCorFundoPagina;
+    private String hexCorFundoCard;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Item> itensCardapio;
 
@@ -83,5 +84,21 @@ public class Cardapio {
 
     public void setHexTexto(String hexTexto) {
         this.hexTexto = hexTexto;
+    }
+
+    public String getHexCorFundoPagina() {
+        return hexCorFundoPagina;
+    }
+
+    public void setHexCorFundoPagina(String hexCorFundoPagina) {
+        this.hexCorFundoPagina = hexCorFundoPagina;
+    }
+
+    public String getHexCorFundoCard() {
+        return hexCorFundoCard;
+    }
+
+    public void setHexCorFundoCard(String hexCorFundoCard) {
+        this.hexCorFundoCard = hexCorFundoCard;
     }
 }

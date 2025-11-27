@@ -1,7 +1,28 @@
+* {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     min-height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Efeito de background animado */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(33, 150, 243, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
 }
 
 .hero-section {
@@ -11,106 +32,120 @@ body {
     color: white;
     text-align: center;
     padding: 2rem 0;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 2rem;
 }
 
 .logo {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    color: #fff;
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    color: #4CAF50;
+    filter: drop-shadow(0 4px 15px rgba(76, 175, 80, 0.3));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
+    font-size: 4rem;
+    font-weight: 800;
     margin-bottom: 1rem;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    letter-spacing: -1px;
+    line-height: 1.2;
 }
 
 h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 300;
     margin-bottom: 3rem;
-    opacity: 0.9;
+    opacity: 0.95;
+    letter-spacing: 0.5px;
 }
 
 .btn-custom {
     display: block;
     width: 100%;
-    max-width: 300px;
-    margin: 0 auto 1.5rem;
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
+    max-width: 320px;
+    margin: 0 auto 1.8rem;
+    padding: 1.2rem 2.5rem;
+    font-size: 1.05rem;
     font-weight: 600;
-    border-radius: 50px;
+    border-radius: 12px;
     border: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-custom::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-custom:active::before {
+    width: 300px;
+    height: 300px;
 }
 
 .btn-primary-custom {
-    background: linear-gradient(135deg, #ff8a00, #e52e71);
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
     color: white;
-}
-
-.btn-secondary-custom {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.btn-custom:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .btn-primary-custom:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(76, 175, 80, 0.4);
+    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+}
+
+.btn-secondary-custom {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
     color: white;
+    border: 2px solid rgba(255, 255, 255, 0.25);
 }
 
 .btn-secondary-custom:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(255, 255, 255, 0.2);
+}
+
+.btn-custom:hover {
     color: white;
+    text-decoration: none;
 }
-
-.features {
-    background: white;
-    padding: 5rem 0;
-    border-radius: 30px 30px 0 0;
-    margin-top: -30px;
-    position: relative;
-    z-index: 10;
-}
-
-.feature-icon {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    color: #667eea;
-}
-
-.feature-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #2c3e50;
-}
-
-.feature-text {
-    color: #7f8c8d;
-    line-height: 1.6;
-}
-
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
     }
     to {
         opacity: 1;
@@ -120,32 +155,45 @@ h2 {
 
 .hero-content > * {
     animation: fadeInUp 0.8s ease forwards;
+    opacity: 0;
+}
+
+.hero-content .logo {
+    animation-delay: 0.1s;
 }
 
 .hero-content h1 {
-    animation-delay: 0.2s;
+    animation-delay: 0.3s;
 }
 
 .hero-content h2 {
-    animation-delay: 0.4s;
+    animation-delay: 0.5s;
 }
 
-.hero-content .btn {
-    animation-delay: 0.6s;
+.hero-content .btn-custom {
+    animation-delay: 0.7s;
 }
 
+.hero-content .btn-custom:nth-of-type(2) {
+    animation-delay: 0.9s;
+}
 
 @media (max-width: 768px) {
     h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
     }
     
     h2 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .logo {
-        font-size: 3rem;
+        font-size: 3.5rem;
+    }
+    
+    .btn-custom {
+        padding: 1rem 2rem;
+        font-size: 1rem;
     }
 }
 
@@ -158,8 +206,13 @@ h2 {
         font-size: 1rem;
     }
     
+    .logo {
+        font-size: 2.5rem;
+    }
+    
     .btn-custom {
-        font-size: 1rem;
-        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+        padding: 0.9rem 1.8rem;
+        max-width: 280px;
     }
 }

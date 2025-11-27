@@ -25,14 +25,10 @@ public class  CardapioController {
     }
 
     @GetMapping("/config/buscar")
-    public Cardapio buscarporNome(@RequestBody String nomeEstabelecimento){
-        return cardapioService.buscarPorNome(nomeEstabelecimento);
+    public Cardapio buscarporNome(@RequestParam String nome){
+        return cardapioService.buscarPorNome(nome);
     }
 
-    @GetMapping("retornar/nomes")
-    public List<String> retornarTodosNomesEstabelecimentos(){
-        return cardapioService.getAllNomesEstabelecimento();
-    }
 }
 
 
