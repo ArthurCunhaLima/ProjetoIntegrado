@@ -31,6 +31,16 @@
                 return ResponseEntity.status(500).body("Erro ao gerar cardápio: " + e.getMessage());
             }
         }
+
+        @PutMapping("/atualizarCardapio")
+        public ResponseEntity<?> atualizarCardapio(@RequestBody Cardapio cardapio) {
+            try {
+                Cardapio cardapioAtualizado = cardapioService.atualizarCardapio(cardapio);
+                return ResponseEntity.ok(cardapioAtualizado);
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body("Erro ao atualizar cardápio: " + e.getMessage());
+            }
+        }
         @DeleteMapping("/item/remover/{nome}")
         public ResponseEntity<?> removerItem(@PathVariable String nome) {
             Item removido = itemService.removerItem(nome);

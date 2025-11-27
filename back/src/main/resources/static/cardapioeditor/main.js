@@ -4,8 +4,77 @@ document.addEventListener("DOMContentLoaded", () => {
     const final = document.getElementById("conteudo");
     const naoEncontrado = document.getElementById("cardapioNaoEncontrado");
     const tentarNovamente = document.getElementById("tentarNovamente");
+    const cardapiosList = document.getElementById("cardapiosList");
     
     let itensPendentes = [];
+    
+    // Carregar lista de cardápios ao iniciar
+    carregarListaCardapios();
+    
+    // Máscara para o campo de valor (Real)
+    const valorInput = document.getElementById("valor");
+    if (valorInput) {
+        valorInput.addEventListener("input", function(e) {
+            let valor = e.target.value.replace(/\D/g, "");
+            if (valor) {
+                valor = (parseInt(valor) / 100).toFixed(2);
+                e.target.value = valor;
+            }
+        });
+    }
+    
+    // Função para carregar lista de cardápios
+    async function carregarListaCardapios() {
+        try {
+            const response = await fetch("http://localhost:8080/cardapio/config/retornar");
+            
+            if (response.ok) {
+                const cardapios = await response.json();
+                exibirListaCardapios(cardapios);
+            } else {
+                cardapiosList.innerHTML = '<p class="text-muted">Nenhum cardápio disponível</p>';
+            }
+        } catch (error) {
+            console.error("Erro ao carregar cardápios:", error);
+            cardapiosList.innerHTML = '<p class="text-danger">Erro ao carregar cardápios</p>';
+        }
+    }
+    
+    // Função para exibir lista de cardápios
+    function exibirListaCardapios(cardapios) {
+        cardapiosList.innerHTML = "";
+        
+        if (cardapios.length === 0) {
+            cardapiosList.innerHTML = '<p class="text-muted">Nenhum cardápio disponível</p>';
+            return;
+        }
+        
+        cardapios.forEach(cardapio => {
+            const item = document.createElement("button");
+            item.type = "button";
+            item.className = "list-group-item list-group-item-action text-start";
+            item.innerHTML = `
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    <h6 class="mb-0">
+                        <i class="bi bi-bookmark me-2"></i>${cardapio.nomeEstabelecimento}
+                    </h6>
+                    <small class="text-muted">${cardapio.itensCardapio?.length || 0} itens</small>
+                </div>
+            `;
+            item.addEventListener("click", () => {
+                carregarCardapioParaEdicao(cardapio);
+            });
+            cardapiosList.appendChild(item);
+        });
+    }
+    
+    // Função para carregar cardápio para edição
+    function carregarCardapioParaEdicao(cardapio) {
+        inicial.classList.add("hidden");
+        final.classList.remove("hidden");
+        final.classList.add("fade-in");
+        carregarDadosCardapio(cardapio);
+    }
     
     // Buscar cardápio
     formulario.addEventListener("submit", async function(event) {
@@ -19,18 +88,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         try {
-            const response = await fetch(`http://localhost:8080/cardapio/config/retornar?nome=${encodeURIComponent(nomeBusca)}`);
+            const response = await fetch(`http://localhost:8080/cardapio/config/buscar?nome=${encodeURIComponent(nomeBusca)}`);
             
             if (response.ok) {
                 const cardapio = await response.json();
-                inicial.classList.add("hidden");
-                final.classList.remove("hidden");
-                final.classList.add("fade-in");
-                carregarDadosCardapio(cardapio);
+                if (cardapio && cardapio.nomeEstabelecimento) {
+                    // Redirecionar para o cardápio
+                    const nomeFormatado = cardapio.nomeEstabelecimento.replace(/ /g, "-");
+                    window.location.href = `/pages/cardapio/${nomeFormatado}`;
+                } else {
+                    // Cardápio nulo
+                    exibirNaoEncontrado();
+                }
             } else if (response.status === 404) {
-                inicial.classList.add("hidden");
-                naoEncontrado.classList.remove("hidden");
-                naoEncontrado.classList.add("fade-in");
+                exibirNaoEncontrado();
             } else {
                 throw new Error(`Erro na busca: ${response.status}`);
             }
@@ -40,6 +111,13 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Erro ao buscar cardápio. Tente novamente.");
         }
     });
+    
+    // Função para exibir "não encontrado"
+    function exibirNaoEncontrado() {
+        inicial.classList.add("hidden");
+        naoEncontrado.classList.remove("hidden");
+        naoEncontrado.classList.add("fade-in");
+    }
     
     // Tentar novamente
     tentarNovamente.addEventListener("click", function() {
@@ -99,6 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
             nomeEstabelecimento: nomeEstabelecimento,
             hexFundo: formEstabelecimento.hexFundo.value || "#ffffff",
             hexTexto: formEstabelecimento.hexTexto.value || "#000000",
+            hexCorFundoPagina: formEstabelecimento.hexCorFundoPagina?.value || "#f5f7fa",
+            hexCorFundoCard: formEstabelecimento.hexCorFundoCard?.value || "#ffffff",
             itensCardapio: itensPendentes
         };
 
@@ -127,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Função para carregar dados do cardápio
     function carregarDadosCardapio(cardapio) {
-        document.getElementById("nomeEstabelecimento").value = cardapio.nome || "";
+        document.getElementById("nomeEstabelecimento").value = cardapio.nomeEstabelecimento || "";
         
         // Ajuste conforme a estrutura real da sua API
         itensPendentes = cardapio.itensCardapio || cardapio.itens || [];
@@ -138,6 +218,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (cardapio.hexTexto) {
             document.getElementById("hexTexto").value = cardapio.hexTexto;
+        }
+        if (cardapio.hexCorFundoPagina) {
+            document.getElementById("hexCorFundoPagina").value = cardapio.hexCorFundoPagina;
+        }
+        if (cardapio.hexCorFundoCard) {
+            document.getElementById("hexCorFundoCard").value = cardapio.hexCorFundoCard;
         }
         
         carregarItens();
@@ -161,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         itensPendentes.forEach((item, index) => {
             const itemElement = document.createElement("div");
-            itemElement.className = "card mb-3 item-card";
+            itemElement.className = "item-card";
             
             // Adicionar animação
             itemElement.style.opacity = "0";
@@ -175,27 +261,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!item.descricao) {
                 itemElement.innerHTML = `
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">${item.nome}</h5>
-                            <span class="badge bg-primary fs-6">R$ ${item.valor.toFixed(2)}</span>
-                        </div>
+                    <div class="item-info">
+                        <div class="item-name">${item.nome}</div>
+                        <div class="item-price">R$ ${item.valor.toFixed(2)}</div>
                     </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 `;
             } else {
                 itemElement.innerHTML = `
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="card-title mb-0">${item.nome}</h5>
-                            <span class="badge bg-primary fs-6">R$ ${item.valor.toFixed(2)}</span>
-                        </div>
-                        <p class="card-text text-muted mb-0">${item.descricao}</p>
+                    <div class="item-info">
+                        <div class="item-name">${item.nome}</div>
+                        <small class="text-muted">${item.descricao}</small>
+                        <div class="item-price">R$ ${item.valor.toFixed(2)}</div>
                     </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 `;
             }
             
             ul.appendChild(itemElement);
         });
+    }
+
+    function removerItem(index) {
+        itensPendentes.splice(index, 1);
+        carregarItens();
     }
 
     // Inicializar

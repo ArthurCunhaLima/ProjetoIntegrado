@@ -2,6 +2,18 @@ document.addEventListener("DOMContentLoaded", carregarItens);
 
 let itensPendentes = [];
 
+// Máscara para o campo de valor (Real)
+const valorInput = document.getElementById("valor");
+if (valorInput) {
+    valorInput.addEventListener("input", function(e) {
+        let valor = e.target.value.replace(/\D/g, "");
+        if (valor) {
+            valor = (parseInt(valor) / 100).toFixed(2);
+            e.target.value = valor;
+        }
+    });
+}
+
 document.getElementById("inputItem").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -35,6 +47,8 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
         nomeEstabelecimento: formEstabelecimento.nomeEstabelecimento.value,
         hexFundo: formEstabelecimento.hexFundo.value,
         hexTexto: formEstabelecimento.hexTexto.value,
+        hexCorFundoPagina: formEstabelecimento.hexCorFundoPagina?.value || "#f5f7fa",
+        hexCorFundoCard: formEstabelecimento.hexCorFundoCard?.value || "#ffffff",
         itensCardapio: itensPendentes
     };
 
@@ -71,12 +85,14 @@ function exibirModalSucesso(data) {
     const qrcodeDiv = document.getElementById("qrcode");
     qrcodeDiv.innerHTML = `<img src="${data.qrCodeDataUrl}" alt="QR Code" style="max-width: 250px; border-radius: 8px;">`;
     
-    // Atualizar o link do cardápio
+    // Atualizar o link do cardápio (agora clicável)
     const alertDiv = document.querySelector(".modal-body .alert-info");
     alertDiv.innerHTML = `
         <small>
             <i class="bi bi-link-45deg me-1"></i>
-            <strong>${data.cardapioUrl}</strong>
+            <a href="${data.cardapioUrl}" target="_blank" style="color: #0c63e4; text-decoration: none; font-weight: 500;">
+                ${data.cardapioUrl}
+            </a>
         </small>
     `;
     
@@ -114,29 +130,31 @@ async function carregarItens() {
         return;
     }
 
-    itens.forEach(item => {
+    itens.forEach((item, index) => {
         console.log("Renderizando:", item.nome);
         const itemElement = document.createElement("div");
-        itemElement.className = "card mb-3 item-card";
+        itemElement.className = "item-card";
         
         if (!item.descricao) {
             itemElement.innerHTML = `
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">${item.nome}</h5>
-                        <span class="badge bg-primary fs-6">R$ ${item.valor.toFixed(2)}</span>
-                    </div>
+                <div class="item-info">
+                    <div class="item-name">${item.nome}</div>
+                    <div class="item-price">R$ ${item.valor.toFixed(2)}</div>
                 </div>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})">
+                    <i class="bi bi-trash"></i>
+                </button>
             `;
         } else {
             itemElement.innerHTML = `
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title mb-0">${item.nome}</h5>
-                        <span class="badge bg-primary fs-6">R$ ${item.valor.toFixed(2)}</span>
-                    </div>
-                    <p class="card-text text-muted mb-0">${item.descricao}</p>
+                <div class="item-info">
+                    <div class="item-name">${item.nome}</div>
+                    <small class="text-muted">${item.descricao}</small>
+                    <div class="item-price">R$ ${item.valor.toFixed(2)}</div>
                 </div>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerItem(${index})">
+                    <i class="bi bi-trash"></i>
+                </button>
             `;
         }
         
@@ -144,5 +162,9 @@ async function carregarItens() {
     });
 }
 
+function removerItem(index) {
+    itensPendentes.splice(index, 1);
+    carregarItens();
+}
 
 carregarItens();
