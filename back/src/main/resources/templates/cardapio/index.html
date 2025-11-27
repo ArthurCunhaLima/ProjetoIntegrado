@@ -15,7 +15,6 @@
         
         .cardapio-header {
             background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
-            color: white;
             padding: 3rem 0;
             margin-bottom: 2rem;
             text-align: center;
@@ -54,11 +53,12 @@
             margin-bottom: 1.5rem;
             transition: all 0.3s ease;
             overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
         
         .item-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
         }
         
         .item-card .card-body {
@@ -110,7 +110,21 @@
             opacity: 0.5;
         }
         
-
+        .card-shadow-light {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        .card-shadow-dark {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+        }
+        
+        .card-shadow-light:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25) !important;
+        }
+        
+        .card-shadow-dark:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+        }
 
         @media (max-width: 768px) {
             .cardapio-header h1 {
@@ -129,6 +143,14 @@
             .item-card .card-body {
                 padding: 1.25rem;
             }
+            
+            .item-card {
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            }
+            
+            .item-card:hover {
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            }
         }
         
         @media (max-width: 576px) {
@@ -143,13 +165,19 @@
             .categoria-title {
                 font-size: 1.5rem;
             }
+            
+            .item-card {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            }
+            
+            .item-card:hover {
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            }
         }
     </style>
 </head>
 <body th:style="'background-color:' + ${cardapio.hexFundo} + '; color:' + ${cardapio.hexTexto}">
     
-
-
     <header class="cardapio-header" th:style="'background: linear-gradient(135deg, ' + ${cardapio.hexFundo} + ', ' + ${cardapio.hexFundo} + 'cc)'">
         <div class="container-cardapio">
             <h1 th:text="${cardapio.nomeEstabelecimento}">Nome do Estabelecimento</h1>
@@ -168,6 +196,7 @@
                 <div class="categoria-grid">
                     <div th:each="item : ${cardapio.itensCardapio}">
                         <div class="card item-card" 
+                            th:classappend="${#strings.startsWith(cardapio.hexFundo, '#fff') or #strings.startsWith(cardapio.hexFundo, '#ffffff') or #strings.startsWith(cardapio.hexFundo, '#FFF') or #strings.startsWith(cardapio.hexFundo, '#FFFFFF')} ? 'card-shadow-light' : 'card-shadow-dark'"
                             th:style="'background-color: ' + ${cardapio.hexFundo} + 
                                 '; color: ' + ${cardapio.hexTexto} + 
                                 '; border: 2px solid ' + ${cardapio.hexTexto} + '40;'">
@@ -191,8 +220,6 @@
             </div>
         </div>
         
-
-
         <div th:if="${cardapio?.itensCardapio == null or cardapio.itensCardapio.empty}" 
              class="empty-state">
             <i class="bi bi-journal-x"></i>
@@ -200,9 +227,6 @@
             <p>Nosso cardápio está passando por melhorias. Volte em breve!</p>
         </div>
     </main>
-
-
-
 
     <footer class="mt-5 py-4 text-center" 
             th:style="'background-color: ' + ${cardapio.hexFundo} + '; color: ' + ${cardapio.hexTexto} + '; border-top: 1px solid ' + ${cardapio.hexTexto} + '30;'">
@@ -220,7 +244,6 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Adiciona animação suave aos cards
             const cards = document.querySelectorAll('.item-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
@@ -233,18 +256,47 @@
                 }, index * 100);
             });
             
-            // Ajusta o contraste para melhor legibilidade
+            function adjustCardShadows() {
+                const backgroundColor = document.body.style.backgroundColor;
+                const cards = document.querySelectorAll('.item-card');
+                
+                if (backgroundColor) {
+                    const hexFundo = backgroundColor.replace('#', '');
+                    const r = parseInt(hexFundo.substr(0,2), 16);
+                    const g = parseInt(hexFundo.substr(2,2), 16);
+                    const b = parseInt(hexFundo.substr(4,2), 16);
+                    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                    
+                    cards.forEach(card => {
+                        if (brightness > 128) {
+                            card.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+                            card.addEventListener('mouseenter', function() {
+                                this.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.25)';
+                            });
+                            card.addEventListener('mouseleave', function() {
+                                this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+                            });
+                        } else {
+                            card.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.4)';
+                            card.addEventListener('mouseenter', function() {
+                                this.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.6)';
+                            });
+                            card.addEventListener('mouseleave', function() {
+                                this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.4)';
+                            });
+                        }
+                    });
+                }
+            }
+            
             function adjustContrast() {
                 const backgroundColor = document.body.style.backgroundColor;
                 const textColor = document.body.style.color;
                 
-                // Se as cores forem muito similares, ajusta automaticamente
                 if (backgroundColor && textColor) {
-                    // Remove o # das cores hex
                     const hexFundo = backgroundColor.replace('#', '');
                     const hexTexto = textColor.replace('#', '');
                     
-                    // Converte para RGB
                     const rFundo = parseInt(hexFundo.substr(0,2), 16);
                     const gFundo = parseInt(hexFundo.substr(2,2), 16);
                     const bFundo = parseInt(hexFundo.substr(4,2), 16);
@@ -253,21 +305,21 @@
                     const gTexto = parseInt(hexTexto.substr(2,2), 16);
                     const bTexto = parseInt(hexTexto.substr(4,2), 16);
                     
-                    // Calcula diferença de brilho (fórmula de luminosidade)
                     const brightnessFundo = (rFundo * 299 + gFundo * 587 + bFundo * 114) / 1000;
                     const brightnessTexto = (rTexto * 299 + gTexto * 587 + bTexto * 114) / 1000;
                     
                     const difference = Math.abs(brightnessFundo - brightnessTexto);
                     
-                    // Se a diferença for muito pequena, ajusta automaticamente
                     if (difference < 125) {
                         document.body.style.color = brightnessFundo > 128 ? '#000000' : '#FFFFFF';
                     }
                 }
             }
             
-            // Executa o ajuste de contraste
-            setTimeout(adjustContrast, 100);
+            setTimeout(() => {
+                adjustCardShadows();
+                adjustContrast();
+            }, 100);
         });
     </script>
 </body>
