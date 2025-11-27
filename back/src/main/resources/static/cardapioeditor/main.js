@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     // Função para filtrar cardápios em tempo real
-    function filtrarCardapios() {
+    window.filtrarCardapios = function() {
         const termoBusca = nomeBuscaInput.value.trim().toLowerCase();
         
         if (termoBusca === '') {
@@ -60,9 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Filtrar cardápios pelo nome do estabelecimento
+        // Filtrar cardápios que começam com o termo buscado
         const cardapiosFiltrados = todosCardapios.filter(cardapio => 
-            cardapio.nomeEstabelecimento.toLowerCase().includes(termoBusca)
+            cardapio.nomeEstabelecimento.toLowerCase().startsWith(termoBusca)
         );
         
         exibirListaCardapios(cardapiosFiltrados);
@@ -84,21 +84,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         cardapios.forEach(cardapio => {
-            const item = document.createElement("button");
-            item.type = "button";
-            item.className = "list-group-item list-group-item-action text-start";
+            const item = document.createElement("div");
+            item.className = "list-group-item list-group-item-action";
             item.innerHTML = `
                 <div class="d-flex w-100 justify-content-between align-items-center">
-                    <h6 class="mb-0">
-                        <i class="bi bi-bookmark me-2"></i>${cardapio.nomeEstabelecimento}
-                    </h6>
-                    <small class="text-muted">${cardapio.itensCardapio?.length || 0} itens</small>
+                    <div class="flex-grow-1" style="cursor: pointer;" data-cardapio-nome="${cardapio.nomeEstabelecimento}">
+                        <h6 class="mb-0">
+                            <i class="bi bi-journal-text me-2"></i>${cardapio.nomeEstabelecimento}
+                        </h6>
+                        <small class="text-muted">${cardapio.itensCardapio?.length || 0} itens</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="excluirCardapio('${cardapio.nomeEstabelecimento}')" title="Excluir cardápio">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 </div>
-                ${cardapio.descricao ? `<small class="text-muted">${cardapio.descricao}</small>` : ''}
             `;
-            item.addEventListener("click", () => {
+            
+            // Adicionar evento de clique apenas na área do nome
+            const cardapioArea = item.querySelector('[data-cardapio-nome]');
+            cardapioArea.addEventListener("click", () => {
                 carregarCardapioParaEdicao(cardapio);
             });
+            
             cardapiosList.appendChild(item);
         });
     }
@@ -122,29 +129,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        try {
-            const response = await fetch(`http://localhost:8080/cardapio/config/buscar?nome=${encodeURIComponent(nomeBusca)}`);
-            
-            if (response.ok) {
-                const cardapio = await response.json();
-                if (cardapio && cardapio.nomeEstabelecimento) {
-                    // Redirecionar para o cardápio
-                    const nomeFormatado = cardapio.nomeEstabelecimento.replace(/ /g, "-");
-                    window.location.href = `/pages/cardapio/${nomeFormatado}`;
-                } else {
-                    // Cardápio nulo
-                    exibirNaoEncontrado();
-                }
-            } else if (response.status === 404) {
-                exibirNaoEncontrado();
-            } else {
-                throw new Error(`Erro na busca: ${response.status}`);
-            }
-            
-        } catch (error) {
-            console.error("Erro ao buscar cardápio:", error);
-            alert("Erro ao buscar cardápio. Tente novamente.");
-        }
+        // Apenas filtrar a lista, não redirecionar
+        filtrarCardapios();
     });
     
     // Função para exibir "não encontrado"
@@ -326,6 +312,64 @@ document.addEventListener("DOMContentLoaded", () => {
     window.removerItem = function(index) {
         itensPendentes.splice(index, 1);
         carregarItens();
+    }
+    
+    // Função para excluir cardápio
+    window.excluirCardapio = async function(nomeEstabelecimento) {
+        if (!confirm(`Tem certeza que deseja excluir o cardápio "${nomeEstabelecimento}"?`)) {
+            return;
+        }
+        
+        try {
+            const response = await fetch(`http://localhost:8080/cardapio/config/excluir?nome=${encodeURIComponent(nomeEstabelecimento)}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok) {
+                alert('Cardápio excluído com sucesso!');
+                carregarListaCardapios();
+            } else {
+                throw new Error('Erro ao excluir cardápio');
+            }
+        } catch (error) {
+            console.error('Erro ao excluir cardápio:', error);
+            alert('Erro ao excluir cardápio. Tente novamente.');
+        }
+    }
+    
+    // Botão para ir para o cardápio
+    const btnIrParaCardapio = document.getElementById("irParaCardapio");
+    if (btnIrParaCardapio) {
+        btnIrParaCardapio.addEventListener("click", function() {
+            const nomeEstabelecimento = document.getElementById("nomeEstabelecimento").value;
+            if (nomeEstabelecimento) {
+                const nomeFormatado = nomeEstabelecimento.replace(/ /g, "-");
+                window.open(`/pages/cardapio/${nomeFormatado}`, '_blank');
+            } else {
+                alert("Por favor, salve o cardápio primeiro!");
+            }
+        });
+    }
+    
+    // Botão para abrir editor avançado
+    const btnEditorAvancado = document.getElementById("btnEditorAvancado");
+    if (btnEditorAvancado) {
+        btnEditorAvancado.addEventListener("click", function() {
+            // Salvar dados do cardápio atual no localStorage para o editor
+            const cardapioData = {
+                nomeEstabelecimento: document.getElementById("nomeEstabelecimento").value || "Meu Restaurante",
+                hexCorFundoPagina: document.getElementById("hexCorFundoPagina").value,
+                hexCorFundoCard: document.getElementById("hexCorFundoCard").value,
+                hexFundo: document.getElementById("hexFundo").value,
+                hexTexto: document.getElementById("hexTexto").value,
+                itensCardapio: itensPendentes
+            };
+            
+            localStorage.setItem('editorCardapioData', JSON.stringify(cardapioData));
+            
+            // Abrir editor em nova guia
+            window.open('/pages/cardapioeditor/editor-avancado', '_blank');
+        });
     }
 
     // Inicializar

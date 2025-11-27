@@ -36,6 +36,9 @@
         public ResponseEntity<?> atualizarCardapio(@RequestBody Cardapio cardapio) {
             try {
                 Cardapio cardapioAtualizado = cardapioService.atualizarCardapio(cardapio);
+                if (cardapioAtualizado == null) {
+                    return ResponseEntity.status(404).body("Cardápio não encontrado: " + cardapio.getNomeEstabelecimento());
+                }
                 return ResponseEntity.ok(cardapioAtualizado);
             } catch (Exception e) {
                 return ResponseEntity.status(500).body("Erro ao atualizar cardápio: " + e.getMessage());

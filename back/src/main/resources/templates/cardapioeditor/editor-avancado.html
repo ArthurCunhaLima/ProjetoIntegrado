@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Avançado - Configurações Visuais</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+
+        /* Barra superior de ferramentas */
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-bottom: 3px solid #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .toolbar-btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toolbar-btn.primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .toolbar-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .toolbar-btn.secondary {
+            background: #64748b;
+            color: white;
+        }
+
+        .toolbar-btn.secondary:hover {
+            background: #475569;
+        }
+
+        /* Painel lateral esquerdo */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            bottom: 0;
+            width: 320px;
+            background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+            border-right: 2px solid #34495e;
+            overflow-y: auto;
+            z-index: 999;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #1a252f;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #4CAF50;
+            border-radius: 4px;
+        }
+
+        .sidebar-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-section h3 {
+            color: #4CAF50;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tool-btn:hover {
+            background: rgba(76, 175, 80, 0.2);
+            transform: translateX(5px);
+        }
+
+        .tool-btn i {
+            font-size: 1.2rem;
+        }
+
+        .property-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .property-input select,
+        select.property-input {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .property-input option,
+        select.property-input option {
+            background: #1a252f;
+            color: white;
+        }
+
+        .property-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .transparent-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+        }
+        
+        .transparent-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #4CAF50;
+        }
+
+        .property-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .color-picker-group {
+            display: grid;
+            grid-template-columns: 1fr 80px;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .color-picker {
+            height: 45px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+        }
+
+        /* Área de preview/edição */
+        .preview-area {
+            position: fixed;
+            left: 320px;
+            top: 60px;
+            right: 0;
+            bottom: 0;
+            background: #f5f7fa;
+            overflow: auto;
+        }
+
+        .cardapio-preview {
+            min-height: 100%;
+            position: relative;
+        }
+
+        .cardapio-header {
+            background: #000000;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .cardapio-header.editing {
+            outline: 3px dashed #4CAF50;
+            outline-offset: -3px;
+        }
+
+        .cardapio-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+            cursor: text;
+        }
+        
+        .cardapio-subtitle {
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .cardapio-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: move;
+            position: relative;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .menu-item:hover {
+            box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .menu-item.selected {
+            outline: 3px solid #4CAF50;
+            outline-offset: 3px;
+        }
+        
+        .menu-item.can-delete:hover .delete-element-btn {
+            display: flex;
+        }
+
+        .menu-item-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item-description {
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        .draggable-text {
+            position: absolute;
+            cursor: move;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            min-width: 100px;
+            z-index: 10;
+        }
+
+        .draggable-text.selected {
+            border-color: #2196F3;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        }
+
+        .draggable-image {
+            position: absolute;
+            cursor: move;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            max-width: 400px;
+            z-index: 10;
+        }
+
+        .draggable-image.selected {
+            border-color: #2196F3;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        }
+
+        .delete-element-btn {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 30px;
+            height: 30px;
+            background: #ef4444;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .draggable-text:hover .delete-element-btn,
+        .draggable-image:hover .delete-element-btn {
+            display: flex;
+        }
+
+        .delete-element-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+        
+        /* Handles de redimensionamento */
+        .resize-handle {
+            position: absolute;
+            background: #4CAF50;
+            border: 2px solid white;
+            z-index: 101;
+            display: none;
+        }
+        
+        .resize-handle-e,
+        .resize-handle-w {
+            width: 8px;
+            height: 100%;
+            top: 0;
+            cursor: ew-resize;
+        }
+        
+        .resize-handle-e { right: -4px; }
+        .resize-handle-w { left: -4px; }
+        
+        .resize-handle-n,
+        .resize-handle-s {
+            height: 8px;
+            width: 100%;
+            left: 0;
+            cursor: ns-resize;
+        }
+        
+        .resize-handle-n { top: -4px; }
+        .resize-handle-s { bottom: -4px; }
+        
+        .resize-handle-nw,
+        .resize-handle-ne,
+        .resize-handle-sw,
+        .resize-handle-se {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .resize-handle-nw { top: -6px; left: -6px; cursor: nwse-resize; }
+        .resize-handle-ne { top: -6px; right: -6px; cursor: nesw-resize; }
+        .resize-handle-sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+        .resize-handle-se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+        
+        .selected .resize-handle {
+            display: block;
+        }
+        
+        .header-element-wrapper,
+        .footer-element-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .header-element-wrapper:hover,
+        .footer-element-wrapper:hover {
+            background: rgba(76, 175, 80, 0.1);
+            outline: 2px solid rgba(76, 175, 80, 0.5);
+            outline-offset: 2px;
+        }
+        
+        .header-element-wrapper.selected,
+        .footer-element-wrapper.selected {
+            background: rgba(76, 175, 80, 0.15);
+            outline: 2px solid #4CAF50;
+            outline-offset: 2px;
+        }
+        
+        .header-element-wrapper.can-delete:hover .delete-element-btn,
+        .footer-element-wrapper.can-delete:hover .delete-element-btn {
+            display: flex;
+        }
+
+        .cardapio-footer {
+            background: #000000;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        /* Info de ajuda */
+        .help-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(76, 175, 80, 0.95);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .help-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .help-info ul {
+            font-size: 0.85rem;
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+
+        .help-info li {
+            margin-bottom: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de ferramentas superior -->
+    <div class="toolbar">
+        <div class="toolbar-title">
+            <i class="bi bi-palette-fill"></i>
+            Editor Avançado de Cardápio
+        </div>
+        <div class="toolbar-actions">
+            <button class="toolbar-btn secondary" onclick="window.close()">
+                <i class="bi bi-x-lg"></i>
+                Cancelar
+            </button>
+            <button class="toolbar-btn primary" id="viewCardapio">
+                <i class="bi bi-eye"></i>
+                Visualizar Cardápio
+            </button>
+            <button class="toolbar-btn primary" id="saveLayout">
+                <i class="bi bi-save"></i>
+                Salvar Layout
+            </button>
+        </div>
+    </div>
+
+    <!-- Painel lateral de ferramentas -->
+    <div class="sidebar">
+        <!-- Adicionar Elementos -->
+        <div class="sidebar-section">
+            <h3><i class="bi bi-plus-circle"></i> Adicionar Elementos</h3>
+            <button class="tool-btn" id="addText">
+                <i class="bi bi-fonts"></i>
+                Adicionar Texto
+            </button>
+            <button class="tool-btn" id="addImage">
+                <i class="bi bi-image"></i>
+                Adicionar Imagem
+            </button>
+            <button class="tool-btn" id="addMenuItem">
+                <i class="bi bi-card-list"></i>
+                Adicionar Item do Menu
+            </button>
+        </div>
+
+        <!-- Configurações Globais -->
+        <div class="sidebar-section">
+            <h3><i class="bi bi-gear"></i> Configurações Globais</h3>
+            
+            <label class="property-label">Nome do Estabelecimento</label>
+            <input type="text" class="property-input" id="estabelecimentoNome" placeholder="Digite o nome">
+            
+            <label class="property-label">Cor de Fundo da Página</label>
+            <div class="color-picker-group">
+                <input type="color" class="color-picker" id="corFundoPagina" value="#f5f7fa">
+                <input type="text" class="property-input" style="margin: 0;" id="corFundoPaginaHex" value="#f5f7fa">
+            </div>
+            
+            <label class="property-label">Cor do Cabeçalho</label>
+            <div class="color-picker-group">
+                <input type="color" class="color-picker" id="corHeader" value="#000000">
+                <input type="text" class="property-input" style="margin: 0;" id="corHeaderHex" value="#000000">
+            </div>
+            
+            <label class="property-label">Cor do Texto do Cabeçalho</label>
+            <div class="color-picker-group">
+                <input type="color" class="color-picker" id="corTextoHeader" value="#ffffff">
+                <input type="text" class="property-input" style="margin: 0;" id="corTextoHeaderHex" value="#ffffff">
+            </div>
+            
+            <label class="property-label">Cor de Fundo dos Itens</label>
+            <div class="color-picker-group">
+                <input type="color" class="color-picker" id="corFundoCard" value="#ffffff">
+                <input type="text" class="property-input" style="margin: 0;" id="corFundoCardHex" value="#ffffff">
+            </div>
+        </div>
+
+        <!-- Propriedades do Elemento Selecionado -->
+        <div class="sidebar-section" id="elementProperties" style="display: none;">
+            <h3><i class="bi bi-sliders"></i> Propriedades do Elemento</h3>
+            
+            <div id="textProperties">
+                <label class="property-label">Texto</label>
+                <textarea class="property-input" id="propText" rows="2" placeholder="Digite o texto"></textarea>
+                
+                <label class="property-label">Tamanho da Fonte (px)</label>
+                <input type="number" class="property-input" id="propFontSize" value="16" min="8" max="100">
+                
+                <label class="property-label">Cor do Texto</label>
+                <div class="color-picker-group">
+                    <input type="color" class="color-picker" id="propColor" value="#000000">
+                    <input type="text" class="property-input" style="margin: 0;" id="propColorHex" value="#000000">
+                </div>
+                
+                <label class="property-label">Cor de Fundo</label>
+                <div class="color-picker-group">
+                    <input type="color" class="color-picker" id="propBgColor" value="#ffffff">
+                    <input type="text" class="property-input" style="margin: 0;" id="propBgColorHex" value="#ffffff">
+                </div>
+                <label class="transparent-checkbox">
+                    <input type="checkbox" id="propBgTransparent">
+                    Fundo Transparente
+                </label>
+                
+                <label class="property-label">Peso da Fonte</label>
+                <select class="property-input" id="propFontWeight">
+                    <option value="300">Light</option>
+                    <option value="400">Normal</option>
+                    <option value="600">Semi-Bold</option>
+                    <option value="700">Bold</option>
+                    <option value="800">Extra-Bold</option>
+                </select>
+                
+                <label class="property-label">Alinhamento</label>
+                <select class="property-input" id="propTextAlign">
+                    <option value="left">Esquerda</option>
+                    <option value="center">Centro</option>
+                    <option value="right">Direita</option>
+                </select>
+            </div>
+            
+            <div id="imageProperties" style="display: none;">
+                <label class="property-label">Largura (px)</label>
+                <input type="number" class="property-input" id="propImgWidth" min="50" max="800">
+                
+                <label class="property-label">Altura (px)</label>
+                <input type="number" class="property-input" id="propImgHeight" min="50" max="800">
+                
+                <label class="property-label">Borda Arredondada (px)</label>
+                <input type="number" class="property-input" id="propBorderRadius" value="8" min="0" max="100">
+            </div>
+            
+            <div id="menuItemProperties" style="display: none;">
+                <label class="property-label">Largura (%)</label>
+                <input type="number" class="property-input" id="propWidth" value="100" min="20" max="100">
+                
+                <label class="property-label">Padding (px)</label>
+                <input type="number" class="property-input" id="propPadding" value="24" min="0" max="100">
+                
+                <label class="property-label">Cor de Fundo</label>
+                <div class="color-picker-group">
+                    <input type="color" class="color-picker" id="propCardBgColor" value="#ffffff">
+                    <input type="text" class="property-input" style="margin: 0;" id="propCardBgColorHex" value="#ffffff">
+                </div>
+                
+                <label class="property-label">Borda Arredondada (px)</label>
+                <input type="number" class="property-input" id="propCardBorderRadius" value="12" min="0" max="50">
+            </div>
+            
+            <button class="tool-btn" style="background: rgba(239, 68, 68, 0.2); border-color: #ef4444;" id="deleteElement">
+                <i class="bi bi-trash"></i>
+                Remover Elemento
+            </button>
+        </div>
+
+        <!-- Ações -->
+        <div class="sidebar-section">
+            <h3><i class="bi bi-lightning"></i> Ações Rápidas</h3>
+            <button class="tool-btn" id="clearAll">
+                <i class="bi bi-eraser"></i>
+                Limpar Elementos Customizados
+            </button>
+        </div>
+    </div>
+
+    <!-- Área de preview/edição -->
+    <div class="preview-area">
+        <div class="cardapio-preview" id="cardapioPreview">
+            <div class="cardapio-header" id="cardapioHeader">
+                <div class="header-element-wrapper can-delete" data-type="header-title">
+                    <h1 class="cardapio-title" id="cardapioTitle" contenteditable="true">Meu Restaurante</h1>
+                    <button class="delete-element-btn" onclick="removeHeaderElement('header-title')" title="Remover título">×</button>
+                </div>
+                <div class="header-element-wrapper can-delete" data-type="header-subtitle">
+                    <p class="cardapio-subtitle" contenteditable="true">Cardápio Digital</p>
+                    <button class="delete-element-btn" onclick="removeHeaderElement('header-subtitle')" title="Remover subtítulo">×</button>
+                </div>
+            </div>
+            
+            <div class="cardapio-content" id="cardapioContent">
+                <!-- Itens do cardápio serão renderizados aqui -->
+            </div>
+            
+            <div class="footer-element-wrapper can-delete" data-type="footer">
+                <div class="cardapio-footer" id="cardapioFooter">
+                    <p style="margin: 0;" contenteditable="true">Desenvolvido com ❤️ pelo sistema MeuCardápio</p>
+                </div>
+                <button class="delete-element-btn" onclick="removeHeaderElement('footer')" title="Remover rodapé">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info de ajuda -->
+    <div class="help-info">
+        <h4><i class="bi bi-info-circle me-2"></i>Dicas:</h4>
+        <ul>
+            <li>Clique e arraste elementos para movê-los</li>
+            <li>Clique em um elemento para editá-lo</li>
+            <li>Use o painel lateral para configurar</li>
+            <li>Salve antes de fechar</li>
+        </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variáveis globais
+        let selectedElement = null;
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+        let elementCounter = 0;
+        let menuItems = [];
+
+        // Carregar dados do cardápio do localStorage
+        const cardapioData = JSON.parse(localStorage.getItem('editorCardapioData') || '{}');
+        
+        // Elementos do DOM
+        const cardapioPreview = document.getElementById('cardapioPreview');
+        const cardapioTitle = document.getElementById('cardapioTitle');
+        const cardapioHeader = document.getElementById('cardapioHeader');
+        const cardapioContent = document.getElementById('cardapioContent');
+        const elementProperties = document.getElementById('elementProperties');
+
+        // Inicializar com dados do cardápio
+        if (cardapioData.nomeEstabelecimento) {
+            cardapioTitle.textContent = cardapioData.nomeEstabelecimento;
+            document.getElementById('estabelecimentoNome').value = cardapioData.nomeEstabelecimento;
+        }
+
+        if (cardapioData.hexCorFundoPagina) {
+            document.getElementById('corFundoPagina').value = cardapioData.hexCorFundoPagina;
+            document.getElementById('corFundoPaginaHex').value = cardapioData.hexCorFundoPagina;
+            document.querySelector('.preview-area').style.background = cardapioData.hexCorFundoPagina;
+        }
+
+        if (cardapioData.hexFundo) {
+            document.getElementById('corHeader').value = cardapioData.hexFundo;
+            document.getElementById('corHeaderHex').value = cardapioData.hexFundo;
+            cardapioHeader.style.background = cardapioData.hexFundo;
+        }
+
+        if (cardapioData.hexTexto) {
+            document.getElementById('corTextoHeader').value = cardapioData.hexTexto;
+            document.getElementById('corTextoHeaderHex').value = cardapioData.hexTexto;
+            cardapioHeader.style.color = cardapioData.hexTexto;
+        }
+
+        if (cardapioData.hexCorFundoCard) {
+            document.getElementById('corFundoCard').value = cardapioData.hexCorFundoCard;
+            document.getElementById('corFundoCardHex').value = cardapioData.hexCorFundoCard;
+        }
+
+        // Renderizar itens do menu
+        if (cardapioData.itensCardapio && cardapioData.itensCardapio.length > 0) {
+            menuItems = cardapioData.itensCardapio;
+            renderMenuItems();
+        }
+        
+        // Tornar elementos do cabeçalho e rodapé selecionáveis
+        document.querySelectorAll('.header-element-wrapper, .footer-element-wrapper').forEach(wrapper => {
+            wrapper.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('delete-element-btn')) {
+                    selectElement(this);
+                }
+            });
+        });
+
+        function renderMenuItems() {
+            cardapioContent.innerHTML = '';
+            menuItems.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'menu-item can-delete';
+                itemElement.dataset.index = index;
+                itemElement.dataset.type = 'menuitem';
+                itemElement.dataset.id = `menuitem-${index}`;
+                itemElement.innerHTML = `
+                    <span class="delete-element-btn" onclick="removeMenuItem(${index})">
+                        <i class="bi bi-x"></i>
+                    </span>
+                    <div class="menu-item-name" contenteditable="true">${item.nome}</div>
+                    ${item.descricao ? `<div class="menu-item-description" contenteditable="true">${item.descricao}</div>` : '<div class="menu-item-description" contenteditable="true" style="color: #999;">Adicione uma descrição...</div>'}
+                    <div class="menu-item-price" contenteditable="true">R$ ${item.valor.toFixed(2)}</div>
+                `;
+                
+                // Aplicar cor de fundo
+                const corCard = document.getElementById('corFundoCard').value;
+                itemElement.style.background = corCard;
+                
+                makeElementSelectable(itemElement);
+                cardapioContent.appendChild(itemElement);
+            });
+        }
+        
+        // Remover item do menu
+        window.removeMenuItem = function(index) {
+            if (confirm('Tem certeza que deseja remover este item?')) {
+                menuItems.splice(index, 1);
+                renderMenuItems();
+            }
+        };
+        
+        // Remover elementos do cabeçalho/rodapé
+        window.removeHeaderElement = function(type) {
+            if (confirm('Tem certeza que deseja remover este elemento?')) {
+                const wrapper = document.querySelector(`[data-type="${type}"]`);
+                if (wrapper) {
+                    wrapper.remove();
+                    // Deselecionar se estiver selecionado
+                    if (selectedElement && selectedElement.dataset.type === type) {
+                        selectedElement = null;
+                        document.getElementById('elementProperties').style.display = 'none';
+                    }
+                }
+            }
+        };
+
+        // Sincronizar cor com hex
+        function syncColorPicker(colorId, hexId) {
+            const colorPicker = document.getElementById(colorId);
+            const hexInput = document.getElementById(hexId);
+            
+            colorPicker.addEventListener('input', (e) => {
+                hexInput.value = e.target.value;
+                applyGlobalColors();
+            });
+            
+            hexInput.addEventListener('input', (e) => {
+                if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                    colorPicker.value = e.target.value;
+                    applyGlobalColors();
+                }
+            });
+        }
+
+        syncColorPicker('corFundoPagina', 'corFundoPaginaHex');
+        syncColorPicker('corHeader', 'corHeaderHex');
+        syncColorPicker('corTextoHeader', 'corTextoHeaderHex');
+        syncColorPicker('corFundoCard', 'corFundoCardHex');
+
+        // Aplicar cores globais
+        function applyGlobalColors() {
+            document.querySelector('.preview-area').style.background = document.getElementById('corFundoPagina').value;
+            cardapioHeader.style.background = document.getElementById('corHeader').value;
+            cardapioHeader.style.color = document.getElementById('corTextoHeader').value;
+            
+            const corCard = document.getElementById('corFundoCard').value;
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.style.background = corCard;
+            });
+        }
+
+        // Atualizar nome do estabelecimento
+        document.getElementById('estabelecimentoNome').addEventListener('input', (e) => {
+            cardapioTitle.textContent = e.target.value;
+        });
+
+        // Adicionar texto
+        document.getElementById('addText').addEventListener('click', () => {
+            elementCounter++;
+            const textElement = document.createElement('div');
+            textElement.className = 'draggable-text';
+            textElement.dataset.id = `text-${elementCounter}`;
+            textElement.dataset.type = 'text';
+            textElement.style.left = '100px';
+            textElement.style.top = `${100 + (elementCounter * 50)}px`;
+            textElement.innerHTML = `
+                <span class="delete-element-btn" onclick="removeElement('text-${elementCounter}')">
+                    <i class="bi bi-x"></i>
+                </span>
+                <span contenteditable="true">Novo Texto ${elementCounter}</span>
+            `;
+            
+            makeDraggable(textElement);
+            cardapioPreview.appendChild(textElement);
+        });
+
+        // Adicionar imagem
+        document.getElementById('addImage').addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        elementCounter++;
+                        const img = document.createElement('img');
+                        img.className = 'draggable-image';
+                        img.dataset.id = `img-${elementCounter}`;
+                        img.dataset.type = 'image';
+                        img.src = event.target.result;
+                        img.style.left = '100px';
+                        img.style.top = `${100 + (elementCounter * 50)}px`;
+                        
+                        const container = document.createElement('div');
+                        container.style.position = 'absolute';
+                        container.style.left = img.style.left;
+                        container.style.top = img.style.top;
+                        container.className = 'draggable-image';
+                        container.dataset.id = img.dataset.id;
+                        container.dataset.type = 'image';
+                        container.innerHTML = `
+                            <span class="delete-element-btn" onclick="removeElement('${img.dataset.id}')">
+                                <i class="bi bi-x"></i>
+                            </span>
+                        `;
+                        container.appendChild(img);
+                        img.style.position = 'relative';
+                        img.style.left = '0';
+                        img.style.top = '0';
+                        
+                        makeDraggable(container);
+                        cardapioPreview.appendChild(container);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        });
+        
+        // Adicionar item do menu
+        document.getElementById('addMenuItem').addEventListener('click', () => {
+            const newItem = {
+                nome: 'Novo Item',
+                descricao: 'Descrição do item',
+                valor: 0.00
+            };
+            menuItems.push(newItem);
+            renderMenuItems();
+        });
+
+        // Tornar elemento arrastável (apenas para textos e imagens customizados)
+        function makeDraggable(element) {
+            // Adicionar handles de redimensionamento
+            if (!element.querySelector('.resize-handle')) {
+                const handles = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
+                handles.forEach(pos => {
+                    const handle = document.createElement('div');
+                    handle.className = `resize-handle resize-handle-${pos}`;
+                    handle.dataset.position = pos;
+                    handle.addEventListener('mousedown', (e) => startResize(e, element, pos));
+                    element.appendChild(handle);
+                });
+            }
+            
+            element.addEventListener('mousedown', startDrag);
+            element.addEventListener('click', (e) => {
+                if (!isDragging && !e.target.classList.contains('resize-handle')) {
+                    selectElement(element);
+                }
+            });
+        }
+        
+        // Variáveis para redimensionamento
+        let isResizing = false;
+        let resizeStartX, resizeStartY;
+        let resizeStartWidth, resizeStartHeight;
+        let resizeStartLeft, resizeStartTop;
+        let currentResizeElement = null;
+        let currentResizePosition = null;
+        
+        function startResize(e, element, position) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            isResizing = true;
+            currentResizeElement = element;
+            currentResizePosition = position;
+            
+            resizeStartX = e.clientX;
+            resizeStartY = e.clientY;
+            
+            const rect = element.getBoundingClientRect();
+            resizeStartWidth = rect.width;
+            resizeStartHeight = rect.height;
+            resizeStartLeft = parseInt(element.style.left) || element.offsetLeft;
+            resizeStartTop = parseInt(element.style.top) || element.offsetTop;
+            
+            document.addEventListener('mousemove', doResize);
+            document.addEventListener('mouseup', stopResize);
+        }
+        
+        function doResize(e) {
+            if (!isResizing || !currentResizeElement) return;
+            
+            const deltaX = e.clientX - resizeStartX;
+            const deltaY = e.clientY - resizeStartY;
+            
+            const pos = currentResizePosition;
+            
+            // Redimensionamento horizontal (leste/oeste)
+            if (pos.includes('e')) {
+                currentResizeElement.style.width = Math.max(50, resizeStartWidth + deltaX) + 'px';
+            } else if (pos.includes('w')) {
+                const newWidth = Math.max(50, resizeStartWidth - deltaX);
+                currentResizeElement.style.width = newWidth + 'px';
+                currentResizeElement.style.left = (resizeStartLeft + deltaX) + 'px';
+            }
+            
+            // Redimensionamento vertical (norte/sul)
+            if (pos.includes('s')) {
+                currentResizeElement.style.height = Math.max(30, resizeStartHeight + deltaY) + 'px';
+            } else if (pos.includes('n')) {
+                const newHeight = Math.max(30, resizeStartHeight - deltaY);
+                currentResizeElement.style.height = newHeight + 'px';
+                currentResizeElement.style.top = (resizeStartTop + deltaY) + 'px';
+            }
+            
+            // Atualizar propriedades se for imagem
+            if (currentResizeElement.dataset.type === 'image') {
+                const img = currentResizeElement.querySelector('img');
+                if (img) {
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                }
+            }
+        }
+        
+        function stopResize() {
+            if (isResizing && currentResizeElement) {
+                // Atualizar painel de propriedades
+                if (selectedElement === currentResizeElement) {
+                    if (currentResizeElement.dataset.type === 'image') {
+                        document.getElementById('propImgWidth').value = parseInt(currentResizeElement.style.width) || currentResizeElement.offsetWidth;
+                        document.getElementById('propImgHeight').value = parseInt(currentResizeElement.style.height) || currentResizeElement.offsetHeight;
+                    } else if (currentResizeElement.dataset.type === 'text') {
+                        const textContent = currentResizeElement.querySelector('[contenteditable]') || currentResizeElement.querySelector('span:not(.delete-element-btn)');
+                        if (textContent && currentResizeElement.style.width) {
+                            textContent.style.width = currentResizeElement.style.width;
+                        }
+                    }
+                }
+            }
+            
+            isResizing = false;
+            currentResizeElement = null;
+            currentResizePosition = null;
+            document.removeEventListener('mousemove', doResize);
+            document.removeEventListener('mouseup', stopResize);
+        }
+        
+        // Tornar elemento selecionável (para itens do menu e elementos editáveis)
+        function makeElementSelectable(element) {
+            element.addEventListener('click', (e) => {
+                if (!e.target.contentEditable || e.target.contentEditable === 'false') {
+                    selectElement(element);
+                }
+            });
+        }
+
+        function startDrag(e) {
+            if (e.target.closest('.delete-element-btn')) return;
+            if (e.target.contentEditable === 'true' && e.target.isContentEditable) return;
+            
+            isDragging = true;
+            selectedElement = e.currentTarget;
+            
+            const rect = selectedElement.getBoundingClientRect();
+            const containerRect = cardapioPreview.getBoundingClientRect();
+            
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            
+            selectedElement.style.zIndex = '1000';
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+            
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            if (!isDragging || !selectedElement) return;
+            
+            const containerRect = cardapioPreview.getBoundingClientRect();
+            let newX = e.clientX - containerRect.left - offsetX;
+            let newY = e.clientY - containerRect.top - offsetY;
+            
+            newX = Math.max(0, Math.min(newX, containerRect.width - selectedElement.offsetWidth));
+            newY = Math.max(0, Math.min(newY, containerRect.height - selectedElement.offsetHeight));
+            
+            selectedElement.style.left = newX + 'px';
+            selectedElement.style.top = newY + 'px';
+        }
+
+        function stopDrag() {
+            if (selectedElement && selectedElement.dataset.type !== 'menuitem') {
+                selectedElement.style.zIndex = '10';
+            }
+            setTimeout(() => {
+                isDragging = false;
+            }, 100);
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+
+        function selectElement(element) {
+            document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedElement = element;
+            
+            elementProperties.style.display = 'block';
+            
+            // Esconder todos os painéis de propriedades
+            document.getElementById('textProperties').style.display = 'none';
+            document.getElementById('imageProperties').style.display = 'none';
+            document.getElementById('menuItemProperties').style.display = 'none';
+            
+            const elementType = element.dataset.type;
+            
+            if (elementType === 'text') {
+                document.getElementById('textProperties').style.display = 'block';
+                const textContent = element.querySelector('[contenteditable]') || element.querySelector('span:not(.delete-element-btn)');
+                document.getElementById('propText').value = textContent.textContent;
+                document.getElementById('propFontSize').value = parseInt(window.getComputedStyle(textContent).fontSize);
+                const color = rgbToHex(window.getComputedStyle(textContent).color);
+                document.getElementById('propColor').value = color;
+                document.getElementById('propColorHex').value = color;
+                const bgColor = rgbToHex(window.getComputedStyle(element).backgroundColor);
+                const isTransparent = window.getComputedStyle(element).backgroundColor === 'transparent' || bgColor === '#000000' && window.getComputedStyle(element).backgroundColor.includes('rgba(0, 0, 0, 0)');
+                document.getElementById('propBgColor').value = bgColor;
+                document.getElementById('propBgColorHex').value = bgColor;
+                document.getElementById('propBgTransparent').checked = isTransparent;
+                document.getElementById('propBgColor').disabled = isTransparent;
+                document.getElementById('propBgColorHex').disabled = isTransparent;
+                document.getElementById('propFontWeight').value = window.getComputedStyle(textContent).fontWeight;
+                document.getElementById('propTextAlign').value = window.getComputedStyle(textContent).textAlign || 'left';
+            } else if (elementType === 'header-title' || elementType === 'header-subtitle') {
+                document.getElementById('textProperties').style.display = 'block';
+                const textContent = element.querySelector('[contenteditable]');
+                document.getElementById('propText').value = textContent.textContent;
+                document.getElementById('propFontSize').value = parseInt(window.getComputedStyle(textContent).fontSize);
+                const color = rgbToHex(window.getComputedStyle(textContent).color);
+                document.getElementById('propColor').value = color;
+                document.getElementById('propColorHex').value = color;
+                const bgColor = rgbToHex(window.getComputedStyle(textContent).backgroundColor);
+                const isTransparent = window.getComputedStyle(textContent).backgroundColor === 'transparent';
+                document.getElementById('propBgColor').value = bgColor;
+                document.getElementById('propBgColorHex').value = bgColor;
+                document.getElementById('propBgTransparent').checked = isTransparent;
+                document.getElementById('propBgColor').disabled = isTransparent;
+                document.getElementById('propBgColorHex').disabled = isTransparent;
+                document.getElementById('propFontWeight').value = window.getComputedStyle(textContent).fontWeight;
+                document.getElementById('propTextAlign').value = window.getComputedStyle(textContent).textAlign || 'center';
+            } else if (elementType === 'footer') {
+                document.getElementById('textProperties').style.display = 'block';
+                const textContent = element.querySelector('[contenteditable]');
+                document.getElementById('propText').value = textContent.textContent;
+                document.getElementById('propFontSize').value = parseInt(window.getComputedStyle(textContent).fontSize);
+                const color = rgbToHex(window.getComputedStyle(textContent).color);
+                document.getElementById('propColor').value = color;
+                document.getElementById('propColorHex').value = color;
+                const bgColor = rgbToHex(window.getComputedStyle(element.querySelector('.cardapio-footer')).backgroundColor);
+                const isTransparent = window.getComputedStyle(element.querySelector('.cardapio-footer')).backgroundColor === 'transparent';
+                document.getElementById('propBgColor').value = bgColor;
+                document.getElementById('propBgColorHex').value = bgColor;
+                document.getElementById('propBgTransparent').checked = isTransparent;
+                document.getElementById('propBgColor').disabled = isTransparent;
+                document.getElementById('propBgColorHex').disabled = isTransparent;
+                document.getElementById('propFontWeight').value = window.getComputedStyle(textContent).fontWeight;
+                document.getElementById('propTextAlign').value = window.getComputedStyle(textContent).textAlign || 'center';
+            } else if (elementType === 'image') {
+                document.getElementById('imageProperties').style.display = 'block';
+                const img = element.querySelector('img') || element;
+                document.getElementById('propImgWidth').value = img.offsetWidth;
+                document.getElementById('propImgHeight').value = img.offsetHeight;
+                document.getElementById('propBorderRadius').value = parseInt(window.getComputedStyle(element).borderRadius) || 8;
+            } else if (elementType === 'menuitem') {
+                document.getElementById('menuItemProperties').style.display = 'block';
+                const width = (element.offsetWidth / cardapioContent.offsetWidth * 100).toFixed(0);
+                document.getElementById('propWidth').value = width;
+                document.getElementById('propPadding').value = parseInt(window.getComputedStyle(element).padding) || 24;
+                const bgColor = rgbToHex(window.getComputedStyle(element).backgroundColor);
+                const isTransparent = window.getComputedStyle(element).backgroundColor === 'transparent';
+                document.getElementById('propCardBgColor').value = bgColor;
+                document.getElementById('propCardBgColorHex').value = bgColor;
+                document.getElementById('propCardBgTransparent').checked = isTransparent;
+                document.getElementById('propCardBgColor').disabled = isTransparent;
+                document.getElementById('propCardBgColorHex').disabled = isTransparent;
+                document.getElementById('propCardBorderRadius').value = parseInt(window.getComputedStyle(element).borderRadius) || 12;
+            }
+        }
+
+        // Propriedades do elemento - Texto
+        syncColorPicker('propColor', 'propColorHex');
+        syncColorPicker('propBgColor', 'propBgColorHex');
+        syncColorPicker('propCardBgColor', 'propCardBgColorHex');
+
+        document.getElementById('propText').addEventListener('input', (e) => {
+            if (selectedElement) {
+                const type = selectedElement.dataset.type;
+                let textContent;
+                if (type === 'text') {
+                    textContent = selectedElement.querySelector('[contenteditable]') || selectedElement.querySelector('span:not(.delete-element-btn)');
+                } else if (type === 'header-title' || type === 'header-subtitle' || type === 'footer') {
+                    textContent = selectedElement.querySelector('[contenteditable]');
+                }
+                if (textContent) textContent.textContent = e.target.value;
+            }
+        });
+
+        document.getElementById('propFontSize').addEventListener('input', (e) => {
+            if (selectedElement) {
+                const type = selectedElement.dataset.type;
+                let textContent;
+                if (type === 'text') {
+                    textContent = selectedElement.querySelector('[contenteditable]') || selectedElement.querySelector('span:not(.delete-element-btn)');
+                } else if (type === 'header-title' || type === 'header-subtitle' || type === 'footer') {
+                    textContent = selectedElement.querySelector('[contenteditable]');
+                }
+                if (textContent) textContent.style.fontSize = e.target.value + 'px';
+            }
+        });
+
+        document.getElementById('propColor').addEventListener('input', (e) => {
+            if (selectedElement) {
+                const type = selectedElement.dataset.type;
+                let textContent;
+                if (type === 'text') {
+                    textContent = selectedElement.querySelector('[contenteditable]') || selectedElement.querySelector('span:not(.delete-element-btn)');
+                } else if (type === 'header-title' || type === 'header-subtitle' || type === 'footer') {
+                    textContent = selectedElement.querySelector('[contenteditable]');
+                }
+                if (textContent) textContent.style.color = e.target.value;
+            }
+        });
+        
+        document.getElementById('propBgColor').addEventListener('input', (e) => {
+            if (selectedElement && !document.getElementById('propBgTransparent').checked) {
+                const type = selectedElement.dataset.type;
+                if (type === 'text') {
+                    selectedElement.style.backgroundColor = e.target.value;
+                } else if (type === 'header-title' || type === 'header-subtitle') {
+                    const textContent = selectedElement.querySelector('[contenteditable]');
+                    if (textContent) textContent.style.backgroundColor = e.target.value;
+                } else if (type === 'footer') {
+                    const footer = selectedElement.querySelector('.cardapio-footer');
+                    if (footer) footer.style.backgroundColor = e.target.value;
+                }
+            }
+        });
+        
+        document.getElementById('propBgTransparent').addEventListener('change', (e) => {
+            if (selectedElement) {
+                const type = selectedElement.dataset.type;
+                if (e.target.checked) {
+                    if (type === 'text') {
+                        selectedElement.style.backgroundColor = 'transparent';
+                    } else if (type === 'header-title' || type === 'header-subtitle') {
+                        const textContent = selectedElement.querySelector('[contenteditable]');
+                        if (textContent) textContent.style.backgroundColor = 'transparent';
+                    } else if (type === 'footer') {
+                        const footer = selectedElement.querySelector('.cardapio-footer');
+                        if (footer) footer.style.backgroundColor = 'transparent';
+                    }
+                    document.getElementById('propBgColor').disabled = true;
+                    document.getElementById('propBgColorHex').disabled = true;
+                } else {
+                    document.getElementById('propBgColor').disabled = false;
+                    document.getElementById('propBgColorHex').disabled = false;
+                    const color = document.getElementById('propBgColor').value;
+                    if (type === 'text') {
+                        selectedElement.style.backgroundColor = color;
+                    } else if (type === 'header-title' || type === 'header-subtitle') {
+                        const textContent = selectedElement.querySelector('[contenteditable]');
+                        if (textContent) textContent.style.backgroundColor = color;
+                    } else if (type === 'footer') {
+                        const footer = selectedElement.querySelector('.cardapio-footer');
+                        if (footer) footer.style.backgroundColor = color;
+                    }
+                }
+            }
+        });
+
+        document.getElementById('propFontWeight').addEventListener('change', (e) => {
+            if (selectedElement) {
+                const type = selectedElement.dataset.type;
+                let textContent;
+                if (type === 'text') {
+                    textContent = selectedElement.querySelector('[contenteditable]') || selectedElement.querySelector('span:not(.delete-element-btn)');
+                } else if (type === 'header-title' || type === 'header-subtitle' || type === 'footer') {
+                    textContent = selectedElement.querySelector('[contenteditable]');
+                }
+                if (textContent) textContent.style.fontWeight = e.target.value;
+            }
+        });
+        
+        document.getElementById('propTextAlign').addEventListener('change', (e) => {
+            if (selectedElement) {
+                const type = selectedElement.dataset.type;
+                if (type === 'text') {
+                    // Para elementos de texto customizados, aplicar ao container
+                    selectedElement.style.textAlign = e.target.value;
+                    const textContent = selectedElement.querySelector('[contenteditable]') || selectedElement.querySelector('span:not(.delete-element-btn)');
+                    if (textContent) {
+                        textContent.style.textAlign = e.target.value;
+                        textContent.style.display = 'block';
+                        textContent.style.width = '100%';
+                    }
+                } else if (type === 'header-title') {
+                    // Para título do cabeçalho
+                    const textContent = selectedElement.querySelector('[contenteditable]');
+                    if (textContent) textContent.style.textAlign = e.target.value;
+                } else if (type === 'header-subtitle') {
+                    // Para subtítulo do cabeçalho
+                    const textContent = selectedElement.querySelector('[contenteditable]');
+                    if (textContent) textContent.style.textAlign = e.target.value;
+                } else if (type === 'footer') {
+                    // Para rodapé
+                    const textContent = selectedElement.querySelector('[contenteditable]');
+                    if (textContent) textContent.style.textAlign = e.target.value;
+                }
+            }
+        });
+        
+        // Propriedades de imagem
+        document.getElementById('propImgWidth').addEventListener('input', (e) => {
+            if (selectedElement && selectedElement.dataset.type === 'image') {
+                const img = selectedElement.querySelector('img') || selectedElement;
+                img.style.width = e.target.value + 'px';
+                img.style.maxWidth = 'none';
+            }
+        });
+        
+        document.getElementById('propImgHeight').addEventListener('input', (e) => {
+            if (selectedElement && selectedElement.dataset.type === 'image') {
+                const img = selectedElement.querySelector('img') || selectedElement;
+                img.style.height = e.target.value + 'px';
+                img.style.maxHeight = 'none';
+            }
+        });
+        
+        document.getElementById('propBorderRadius').addEventListener('input', (e) => {
+            if (selectedElement && selectedElement.dataset.type === 'image') {
+                selectedElement.style.borderRadius = e.target.value + 'px';
+            }
+        });
+        
+        // Propriedades de item do menu
+        document.getElementById('propWidth').addEventListener('input', (e) => {
+            if (selectedElement && selectedElement.dataset.type === 'menuitem') {
+                selectedElement.style.width = e.target.value + '%';
+            }
+        });
+        
+        document.getElementById('propPadding').addEventListener('input', (e) => {
+            if (selectedElement && selectedElement.dataset.type === 'menuitem') {
+                selectedElement.style.padding = e.target.value + 'px';
+            }
+        });
+        
+        document.getElementById('propCardBgColor').addEventListener('input', (e) => {
+            if (selectedElement && selectedElement.dataset.type === 'menuitem' && !document.getElementById('propCardBgTransparent').checked) {
+                selectedElement.style.backgroundColor = e.target.value;
+            }
+        });
+        
+        document.getElementById('propCardBgTransparent').addEventListener('change', (e) => {
+            if (selectedElement && selectedElement.dataset.type === 'menuitem') {
+                if (e.target.checked) {
+                    selectedElement.style.backgroundColor = 'transparent';
+                    document.getElementById('propCardBgColor').disabled = true;
+                    document.getElementById('propCardBgColorHex').disabled = true;
+                } else {
+                    document.getElementById('propCardBgColor').disabled = false;
+                    document.getElementById('propCardBgColorHex').disabled = false;
+                    selectedElement.style.backgroundColor = document.getElementById('propCardBgColor').value;
+                }
+            }
+        });
+        
+        document.getElementById('propCardBorderRadius').addEventListener('input', (e) => {
+            if (selectedElement && selectedElement.dataset.type === 'menuitem') {
+                selectedElement.style.borderRadius = e.target.value + 'px';
+            }
+        });
+
+        // Remover elemento
+        window.removeElement = function(id) {
+            const element = document.querySelector(`[data-id="${id}"]`);
+            if (element) {
+                element.remove();
+                elementProperties.style.display = 'none';
+                selectedElement = null;
+            }
+        }
+
+        document.getElementById('deleteElement').addEventListener('click', () => {
+            if (selectedElement) {
+                selectedElement.remove();
+                elementProperties.style.display = 'none';
+                selectedElement = null;
+            }
+        });
+
+        // Limpar elementos customizados
+        document.getElementById('clearAll').addEventListener('click', () => {
+            if (confirm('Tem certeza que deseja remover todos os elementos customizados?')) {
+                document.querySelectorAll('.draggable-text, .draggable-image').forEach(el => el.remove());
+                elementProperties.style.display = 'none';
+                selectedElement = null;
+            }
+        });
+
+        // Visualizar cardápio
+        document.getElementById('viewCardapio').addEventListener('click', () => {
+            console.log('Botão Visualizar Cardápio clicado');
+            const cardapioData = JSON.parse(localStorage.getItem('editorCardapioData') || '{}');
+            console.log('Dados do cardápio:', cardapioData);
+            if (cardapioData && cardapioData.id) {
+                const url = `/cardapio?id=${cardapioData.id}`;
+                console.log('Abrindo URL:', url);
+                window.open(url, '_blank');
+            } else {
+                console.error('ID do cardápio não encontrado nos dados:', cardapioData);
+                alert('ID do cardápio não encontrado! Verifique se o cardápio foi criado corretamente.');
+            }
+        });
+        
+        // Salvar layout
+        document.getElementById('saveLayout').addEventListener('click', async () => {
+            console.log('Botão Salvar Layout clicado');
+            const cardapioData = JSON.parse(localStorage.getItem('editorCardapioData') || '{}');
+            console.log('Dados do cardápio para salvar:', cardapioData);
+            if (!cardapioData || !cardapioData.id) {
+                console.error('Erro: ID do cardápio não encontrado!', cardapioData);
+                alert('Erro: ID do cardápio não encontrado! Verifique se o cardápio foi criado corretamente.');
+                return;
+            }
+            
+            // Coletar dados atualizados
+            const updatedData = {
+                id: cardapioData.id,
+                nomeEstabelecimento: document.getElementById('estabelecimentoNome').value || cardapioData.nomeEstabelecimento,
+                hexCorFundoPagina: document.getElementById('corFundoPagina').value,
+                hexFundo: document.getElementById('corHeader').value,
+                hexTexto: document.getElementById('corTextoHeader').value,
+                hexCorFundoCard: document.getElementById('corFundoCard').value,
+                itensCardapio: menuItems
+            };
+            
+            // Coletar elementos customizados
+            const customElements = [];
+            document.querySelectorAll('.draggable-text, .draggable-image').forEach(el => {
+                const data = {
+                    id: el.dataset.id,
+                    type: el.dataset.type,
+                    left: el.style.left,
+                    top: el.style.top,
+                    width: el.style.width,
+                    height: el.style.height
+                };
+                
+                if (el.dataset.type === 'text') {
+                    const textContent = el.querySelector('[contenteditable]') || el.querySelector('span:not(.delete-element-btn)');
+                    data.text = textContent.textContent;
+                    data.fontSize = textContent.style.fontSize || '16px';
+                    data.color = textContent.style.color || '#000000';
+                    data.backgroundColor = el.style.backgroundColor || 'transparent';
+                    data.fontWeight = textContent.style.fontWeight || '400';
+                    data.textAlign = textContent.style.textAlign || 'left';
+                } else if (el.dataset.type === 'image') {
+                    const img = el.querySelector('img');
+                    data.src = img.src;
+                    data.borderRadius = el.style.borderRadius || '8px';
+                }
+                
+                customElements.push(data);
+            });
+            
+            updatedData.customElements = customElements;
+            
+            // Salvar via API
+            try {
+                const response = await fetch('/creator/atualizarCardapio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+                
+                if (response.ok) {
+                    localStorage.setItem('customLayoutData', JSON.stringify(updatedData));
+                    alert('Layout salvo com sucesso!');
+                } else {
+                    alert('Erro ao salvar o layout. Tente novamente.');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar o layout. Verifique a conexão.');
+            }
+        });
+
+        // Converter RGB para HEX
+        function rgbToHex(rgb) {
+            const result = rgb.match(/\d+/g);
+            if (!result) return '#000000';
+            return '#' + result.map(x => {
+                const hex = parseInt(x).toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+        }
+
+        // Desselecionar ao clicar no fundo
+        cardapioPreview.addEventListener('click', (e) => {
+            if (e.target === cardapioPreview || e.target === cardapioContent) {
+                document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+                elementProperties.style.display = 'none';
+                selectedElement = null;
+            }
+        });
+        
+        // Debug: verificar se os botões existem
+        console.log('Verificando botões:');
+        console.log('viewCardapio:', document.getElementById('viewCardapio'));
+        console.log('saveLayout:', document.getElementById('saveLayout'));
+        
+        // Verificar se os dados do cardápio existem no localStorage
+        console.log('Dados no localStorage:', localStorage.getItem('editorCardapioData'));
+    </script>
+</body>
+</html>

@@ -28,6 +28,12 @@ public class  CardapioController {
     public Cardapio buscarporNome(@RequestParam String nome){
         return cardapioService.buscarPorNome(nome);
     }
+    
+    @DeleteMapping("/config/excluir")
+    public String excluirCardapio(@RequestParam String nome){
+        cardapioService.excluirCardapio(nome);
+        return "Cardápio excluído com sucesso";
+    }
 
 }
 

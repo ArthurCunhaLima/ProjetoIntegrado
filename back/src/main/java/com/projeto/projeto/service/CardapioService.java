@@ -90,5 +90,12 @@ public class CardapioService {
         
         return null;
     }
+    
+    public void excluirCardapio(String nomeEstabelecimento) {
+        Cardapio cardapio = cardapioRepository.findByNomeEstabelecimento(nomeEstabelecimento);
+        if (cardapio != null) {
+            cardapioRepository.delete(cardapio);
+        }
+    }
 }
 

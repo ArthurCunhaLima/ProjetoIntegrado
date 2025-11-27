@@ -36,6 +36,11 @@ public class CreatorController {
     public String cardapioEditorPage(){
         return "cardapioeditor/index";
     }
+    
+    @GetMapping("/cardapioeditor/editor-avancado")
+    public String editorAvancadoPage(){
+        return "cardapioeditor/editor-avancado";
+    }
 
     @GetMapping("/cardapio/{nomeEstabelecimento}")
     public String getNomeCardapio(
