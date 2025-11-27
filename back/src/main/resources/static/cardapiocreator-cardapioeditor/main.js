@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", carregarItens);
 
 let itensPendentes = [];
@@ -52,15 +51,50 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
             throw new Error("Erro na requisição: " + response.status);
         }
 
-        await response.json();
+        const data = await response.json();
         itensPendentes = [];
-        alert("Cardápio gerado com sucesso!");
+        
+        // Exibir o QR code e o link
+        exibirModalSucesso(data);
+        
         formEstabelecimento.reset();
         carregarItens();
 
     } catch (error) {
         console.error("Erro ao adicionar item:", error);
         alert("Erro ao gerar cardápio. Tente novamente.");
+    }
+});
+
+function exibirModalSucesso(data) {
+    // Inserir a imagem do QR code
+    const qrcodeDiv = document.getElementById("qrcode");
+    qrcodeDiv.innerHTML = `<img src="${data.qrCodeDataUrl}" alt="QR Code" style="max-width: 250px; border-radius: 8px;">`;
+    
+    // Atualizar o link do cardápio
+    const alertDiv = document.querySelector(".modal-body .alert-info");
+    alertDiv.innerHTML = `
+        <small>
+            <i class="bi bi-link-45deg me-1"></i>
+            <strong>${data.cardapioUrl}</strong>
+        </small>
+    `;
+    
+    // Armazenar o URL para copiar
+    window.cardapioUrl = data.cardapioUrl;
+    
+    // Mostrar o modal
+    const modal = new bootstrap.Modal(document.getElementById('successModal'));
+    modal.show();
+}
+
+document.getElementById("copyLinkBtn").addEventListener("click", () => {
+    if (window.cardapioUrl) {
+        navigator.clipboard.writeText(window.cardapioUrl).then(() => {
+            alert("Link copiado para a área de transferência!");
+        }).catch(err => {
+            console.error("Erro ao copiar:", err);
+        });
     }
 });
 
