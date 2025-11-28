@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
             
-            const response = await fetch("http://localhost:8080/cardapio/config/retornar");
+            const response = await fetch("https://projetointegrado-kper.onrender.com/cardapio/config/retornar");
             
             if (response.ok) {
                 const cardapios = await response.json();
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/creator/atualizarCardapio", {
+            const response = await fetch("https://projetointegrado-kper.onrender.com/creator/atualizarCardapio", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -321,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         try {
-            const response = await fetch(`http://localhost:8080/cardapio/config/excluir?nome=${encodeURIComponent(nomeEstabelecimento)}`, {
+            const response = await fetch(`https://projetointegrado-kper.onrender.com/cardapio/config/excluir?nome=${encodeURIComponent(nomeEstabelecimento)}`, {
                 method: 'DELETE'
             });
             
