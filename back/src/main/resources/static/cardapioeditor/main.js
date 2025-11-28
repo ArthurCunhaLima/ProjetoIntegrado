@@ -351,26 +351,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
     
-    // Botão para abrir editor avançado
-    const btnEditorAvancado = document.getElementById("btnEditorAvancado");
-    if (btnEditorAvancado) {
-        btnEditorAvancado.addEventListener("click", function() {
-            // Salvar dados do cardápio atual no localStorage para o editor
-            const cardapioData = {
-                nomeEstabelecimento: document.getElementById("nomeEstabelecimento").value || "Meu Restaurante",
-                hexCorFundoPagina: document.getElementById("hexCorFundoPagina").value,
-                hexCorFundoCard: document.getElementById("hexCorFundoCard").value,
-                hexFundo: document.getElementById("hexFundo").value,
-                hexTexto: document.getElementById("hexTexto").value,
-                itensCardapio: itensPendentes
-            };
-            
-            localStorage.setItem('editorCardapioData', JSON.stringify(cardapioData));
-            
-            // Abrir editor em nova guia
-            window.open('/pages/cardapioeditor/editor-avancado', '_blank');
-        });
-    }
 
     // Inicializar
     carregarItens();
