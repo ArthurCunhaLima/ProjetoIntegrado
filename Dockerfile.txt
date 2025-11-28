@@ -1,0 +1,33 @@
+# ----------------------------
+# STAGE 1 - Build da aplicação
+# ----------------------------
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
+
+# Diretório de trabalho
+WORKDIR /app
+
+# Copia o pom.xml do backend e baixa dependências
+COPY back/pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copia o código-fonte
+COPY back/src ./src
+
+# Compila o projeto
+RUN mvn package -DskipTests
+
+# ----------------------------
+# STAGE 2 - Runtime
+# ----------------------------
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+# Copia o .jar criado no estágio anterior
+COPY --from=builder /app/target/*.jar app.jar
+
+# Porta exposta
+EXPOSE 8080
+
+# Comando que inicia a aplicação no Render
+ENTRYPOINT ["java", "-jar", "app.jar"]
