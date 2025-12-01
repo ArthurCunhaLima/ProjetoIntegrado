@@ -6,16 +6,10 @@
     <title th:text="${cardapio.nomeEstabelecimento} + ' - Cardápio'">Cardápio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" th:href="@{/cardapio/style.css}">
-    <style>
-    </style>
+    <link rel="stylesheet" th:href="@{/css/temas.css}">
 </head>
-<body th:with="fundoPagina=${cardapio.hexCorFundoPagina != null ? cardapio.hexCorFundoPagina : cardapio.hexFundo}" 
-      th:style="'background-color: ' + ${fundoPagina} + '; color: ' + ${cardapio.hexTexto}">
-    
-
-
-    <header class="cardapio-header" th:style="'background: linear-gradient(135deg, ' + ${cardapio.hexFundo} + ', ' + ${cardapio.hexFundo} + 'cc)'">
+<body th:classappend="${'cardapio-theme tema-' + (cardapio.temaPredefinido ?: 'claro')}">
+    <header class="cardapio-header">
         <div class="container-cardapio">
             <h1 th:text="${cardapio.nomeEstabelecimento}">Nome do Estabelecimento</h1>
             <p class="subtitle">Cardápio Digital</p>
@@ -24,19 +18,11 @@
 
     <main class="container-cardapio">
         <div th:if="${cardapio?.itensCardapio != null and !cardapio.itensCardapio.empty}">
-            
             <div class="categoria-section">
-                <h2 class="categoria-title" th:style="'border-bottom-color: ' + ${cardapio.hexTexto} + ';'">
-                    Itens
-                </h2>
-                
+                <h2 class="categoria-title">Itens</h2>
                 <div class="categoria-grid">
                     <div th:each="item : ${cardapio.itensCardapio}">
-                        <div class="card item-card" 
-                            th:with="fundoCard=${cardapio.hexCorFundoCard != null ? cardapio.hexCorFundoCard : '#ffffff'}"
-                            th:style="'background-color: ' + ${fundoCard} + 
-                                '; color: ' + ${cardapio.hexTexto} + 
-                                '; border: 2px solid ' + ${cardapio.hexTexto} + '40;'">
+                        <div class="card item-card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <h3 class="item-nome" th:text="${item.nome}">Nome do Item</h3>
@@ -56,8 +42,6 @@
                 </div>
             </div>
         </div>
-        
-
 
         <div th:if="${cardapio?.itensCardapio == null or cardapio.itensCardapio.empty}" 
              class="empty-state">
@@ -67,11 +51,7 @@
         </div>
     </main>
 
-
-
- 
-    <footer class="mt-5 py-5 text-center" 
-            th:style="'background: linear-gradient(135deg, ' + ${cardapio.hexFundo} + ', ' + ${cardapio.hexFundo} + 'cc); color: ' + ${cardapio.hexTexto} + '; border-top: 3px solid ' + ${cardapio.hexTexto} + ';'">
+    <footer class="mt-5 py-5 text-center">
         <div class="container-cardapio">
             <p class="mb-0">
                 <small style="font-weight: 500; font-size: 0.95rem;">
@@ -81,8 +61,5 @@
             </p>
         </div>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:src=@{"/cardapio/main.js"}></script>
 </body>
 </html>

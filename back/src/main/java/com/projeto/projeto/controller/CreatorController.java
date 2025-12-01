@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/pages")
+@RequestMapping("")
 
 public class CreatorController {
     private final CardapioService cardapioService;
@@ -35,11 +35,6 @@ public class CreatorController {
     @GetMapping("/cardapioeditor")
     public String cardapioEditorPage(){
         return "cardapioeditor/index";
-    }
-    
-    @GetMapping("/cardapioeditor/editor-avancado")
-    public String editorAvancadoPage(){
-        return "cardapioeditor/editor-avancado";
     }
 
     @GetMapping("/cardapio/{nomeEstabelecimento}")

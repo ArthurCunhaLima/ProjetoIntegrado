@@ -46,7 +46,7 @@ public class CardapioService {
         }
         
         String nomeFormatado = cardapioSalvo.getNomeEstabelecimento().replace(" ", "-");
-        String cardapioUrl = baseUrl + contextPath + "/pages/cardapio/" + nomeFormatado;
+        String cardapioUrl = baseUrl + contextPath + "/cardapio/" + nomeFormatado;
         
         // Gerar QR Code
         String qrCodeDataUrl = qrCodeService.gerarQRCodeDataUrl(cardapioUrl, 300, 300);

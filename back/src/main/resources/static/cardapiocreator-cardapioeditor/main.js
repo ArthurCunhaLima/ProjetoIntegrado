@@ -15,43 +15,63 @@ if (valorInput) {
 
 document.getElementById("inputItem").addEventListener("submit", async (e) => {
     e.preventDefault();
-
+    
     const form = e.target;
     const dados = {
         nome: form.nome.value,
         valor: parseFloat(form.valor.value),
         descricao: form.descricao.value
     };
-
+    
     itensPendentes.push(dados);
 
     console.log("Item adicionado localmente:", dados);
     console.log("Itens pendentes:", itensPendentes);
-
+    
     carregarItens();
     form.reset();
 });
 
 document.getElementById("inputFinal").addEventListener("submit", async (e) => {
     e.preventDefault();
-
+    
     if (itensPendentes.length === 0) {
         alert("Nenhum item para enviar!");
         return;
     }
-
+    
     const formEstabelecimento = document.getElementById("inputFinal");
+    
+    const nomeEstabelecimento = formEstabelecimento.nomeEstabelecimento.value;
+    const verificaURL = `https://projetointegrado-kper.onrender.com/cardapio/${encodeURIComponent(nomeEstabelecimento)}`;
+    
+    try {
+        const verificaResponse = await fetch(verificaURL, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+        if (verificaResponse.ok) {
+        const verificaData = await verificaResponse.json();
+        
+        if (verificaData.existe || verificaData.estabelecimento) {
+            alert(`Estabelecimento "${nomeEstabelecimento}" já existe! Tente novamente com outro nome ou utilize a aba de Edição`);
+            return;
+        }
+    }
+
 
     const payload = {
-        nomeEstabelecimento: formEstabelecimento.nomeEstabelecimento.value,
+        nomeEstabelecimento: nomeEstabelecimento,
         hexFundo: formEstabelecimento.hexFundo.value,
         hexTexto: formEstabelecimento.hexTexto.value,
         hexCorFundoPagina: formEstabelecimento.hexCorFundoPagina?.value || "#f5f7fa",
         hexCorFundoCard: formEstabelecimento.hexCorFundoCard?.value || "#ffffff",
-        itensCardapio: itensPendentes
+        itensCardapio: itensPendentes,
     };
-
-    try {
+    
         const response = await fetch("https://projetointegrado-kper.onrender.com/creator/gerarCardapio", {
             method: "POST",
             headers: {

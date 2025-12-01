@@ -337,14 +337,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-    // Botão para ir para o cardápio
     const btnIrParaCardapio = document.getElementById("irParaCardapio");
     if (btnIrParaCardapio) {
         btnIrParaCardapio.addEventListener("click", function() {
             const nomeEstabelecimento = document.getElementById("nomeEstabelecimento").value;
             if (nomeEstabelecimento) {
                 const nomeFormatado = nomeEstabelecimento.replace(/ /g, "-");
-                window.open(`/pages/cardapio/${nomeFormatado}`, '_blank');
+                window.open(`/cardapio/${nomeFormatado}`, '_blank');
             } else {
                 alert("Por favor, salve o cardápio primeiro!");
             }
@@ -352,6 +351,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
 
-    // Inicializar
     carregarItens();
 });
