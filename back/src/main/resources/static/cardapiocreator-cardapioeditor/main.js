@@ -32,6 +32,155 @@ document.getElementById("inputItem").addEventListener("submit", async (e) => {
     form.reset();
 });
 
+// Adiciona estas variáveis globais (se já não existirem)
+let nomeEstabelecimentoAtual = '';
+let estabelecimentoExiste = false;
+let timeoutVerificacao = null;
+
+// Função para verificar disponibilidade do nome
+async function verificarNomeEstabelecimento(nome) {
+    if (!nome || nome.trim() === '') {
+        return { disponivel: false, motivo: 'Nome vazio' };
+    }
+    
+    const nomeFormatado = nome.trim();
+    
+    // Se for o mesmo nome que já verificamos, retorna o resultado em cache
+    if (nomeFormatado === nomeEstabelecimentoAtual) {
+        return { disponivel: !estabelecimentoExiste };
+    }
+    
+    const verificaURL = `https://projetointegrado-kper.onrender.com/cardapio/${encodeURIComponent(nomeFormatado)}`;
+    
+    try {
+        const verificaResponse = await fetch(verificaURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        // Se o status for 200, o estabelecimento existe
+        if (verificaResponse.ok) {
+            const verificaData = await verificaResponse.json();
+            const existe = verificaData.existe || verificaData.estabelecimento;
+            
+            // Atualiza cache
+            nomeEstabelecimentoAtual = nomeFormatado;
+            estabelecimentoExiste = !!existe;
+            
+            return { 
+                disponivel: !existe, 
+                motivo: existe ? 'Estabelecimento já existe' : 'Disponível'
+            };
+        } 
+        // Se for 404, não existe - disponível
+        else if (verificaResponse.status === 404) {
+            nomeEstabelecimentoAtual = nomeFormatado;
+            estabelecimentoExiste = false;
+            return { disponivel: true, motivo: 'Disponível' };
+        }
+        // Outros erros
+        else {
+            return { 
+                disponivel: false, 
+                motivo: `Erro na verificação: ${verificaResponse.status}`
+            };
+        }
+    } catch (error) {
+        console.error("Erro ao verificar nome:", error);
+        return { disponivel: false, motivo: 'Erro de conexão' };
+    }
+}
+
+// Função para atualizar o estado do botão
+function atualizarBotaoSubmit(disponivel, motivo = '') {
+    const botaoSubmit = document.querySelector('#inputFinal button[type="submit"]');
+    const mensagemElemento = document.getElementById('mensagem-validacao') || criarElementoMensagem();
+    
+    if (!botaoSubmit) return;
+    
+    if (disponivel) {
+        botaoSubmit.disabled = false;
+        botaoSubmit.style.opacity = '1';
+        botaoSubmit.style.cursor = 'pointer';
+        mensagemElemento.textContent = '✓ Nome disponível';
+        mensagemElemento.style.color = '#28a745';
+    } else {
+        botaoSubmit.disabled = true;
+        botaoSubmit.style.opacity = '0.5';
+        botaoSubmit.style.cursor = 'not-allowed';
+        
+        if (motivo) {
+            mensagemElemento.textContent = `✗ ${motivo}`;
+            mensagemElemento.style.color = '#dc3545';
+        }
+    }
+}
+
+// Cria elemento para mensagens de validação
+function criarElementoMensagem() {
+    const mensagemElemento = document.createElement('div');
+    mensagemElemento.id = 'mensagem-validacao';
+    mensagemElemento.style.fontSize = '0.9em';
+    mensagemElemento.style.marginTop = '5px';
+    mensagemElemento.style.minHeight = '20px';
+    
+    const nomeInput = document.querySelector('#inputFinal input[name="nomeEstabelecimento"]');
+    if (nomeInput && nomeInput.parentNode) {
+        nomeInput.parentNode.appendChild(mensagemElemento);
+    }
+    
+    return mensagemElemento;
+}
+
+// Adiciona evento de input com debounce ao campo de nome
+document.addEventListener('DOMContentLoaded', function() {
+    const nomeInput = document.querySelector('#inputFinal input[name="nomeEstabelecimento"]');
+    
+    if (nomeInput) {
+        // Cria o elemento de mensagem
+        criarElementoMensagem();
+        
+        // Inicializa o botão como desabilitado
+        atualizarBotaoSubmit(false, 'Digite um nome para o estabelecimento');
+        
+        // Verificação ao digitar (com debounce)
+        nomeInput.addEventListener('input', function(e) {
+            const nome = e.target.value.trim();
+            
+            // Limpa timeout anterior
+            if (timeoutVerificacao) {
+                clearTimeout(timeoutVerificacao);
+            }
+            
+            // Se o campo estiver vazio
+            if (!nome) {
+                atualizarBotaoSubmit(false, 'Digite um nome para o estabelecimento');
+                return;
+            }
+            
+            // Espera 500ms após a última digitação para fazer a requisição
+            timeoutVerificacao = setTimeout(async () => {
+                atualizarBotaoSubmit(false, 'Verificando disponibilidade...');
+                
+                const resultado = await verificarNomeEstabelecimento(nome);
+                atualizarBotaoSubmit(resultado.disponivel, resultado.motivo);
+            }, 500);
+        });
+        
+        // Verificação ao perder o foco (instantânea)
+        nomeInput.addEventListener('blur', async function(e) {
+            const nome = e.target.value.trim();
+            if (nome) {
+                const resultado = await verificarNomeEstabelecimento(nome);
+                atualizarBotaoSubmit(resultado.disponivel, resultado.motivo);
+            }
+        });
+    }
+});
+
+// Event listener do submit MODIFICADO
 document.getElementById("inputFinal").addEventListener("submit", async (e) => {
     e.preventDefault();
     
@@ -41,37 +190,33 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
     }
     
     const formEstabelecimento = document.getElementById("inputFinal");
+    const nomeEstabelecimento = formEstabelecimento.nomeEstabelecimento.value.trim();
     
-    const nomeEstabelecimento = formEstabelecimento.nomeEstabelecimento.value;
-    const verificaURL = `https://projetointegrado-kper.onrender.com/cardapio/${encodeURIComponent(nomeEstabelecimento)}`;
-    
-    try {
-        const verificaResponse = await fetch(verificaURL, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
-
-        if (verificaResponse.ok) {
-        const verificaData = await verificaResponse.json();
-        
-        if (verificaData.existe || verificaData.estabelecimento) {
-            alert(`Estabelecimento "${nomeEstabelecimento}" já existe! Tente novamente com outro nome ou utilize a aba de Edição`);
-            return;
-        }
+    // Verificação final (segurança extra)
+    if (!nomeEstabelecimento) {
+        alert("Por favor, insira um nome para o estabelecimento!");
+        return;
     }
-
-
-    const payload = {
-        nomeEstabelecimento: nomeEstabelecimento,
-        hexFundo: formEstabelecimento.hexFundo.value,
-        hexTexto: formEstabelecimento.hexTexto.value,
-        hexCorFundoPagina: formEstabelecimento.hexCorFundoPagina?.value || "#f5f7fa",
-        hexCorFundoCard: formEstabelecimento.hexCorFundoCard?.value || "#ffffff",
-        itensCardapio: itensPendentes,
-    };
     
+    // Verifica uma última vez antes de enviar
+    const verificacaoFinal = await verificarNomeEstabelecimento(nomeEstabelecimento);
+    if (!verificacaoFinal.disponivel) {
+        alert(`Não foi possível criar: ${verificacaoFinal.motivo}`);
+        atualizarBotaoSubmit(false, verificacaoFinal.motivo);
+        return;
+    }
+    
+    // Se passou por todas as validações, continua com a lógica original
+    try {
+        const payload = {
+            nomeEstabelecimento: nomeEstabelecimento,
+            hexFundo: formEstabelecimento.hexFundo.value,
+            hexTexto: formEstabelecimento.hexTexto.value,
+            hexCorFundoPagina: formEstabelecimento.hexCorFundoPagina?.value || "#f5f7fa",
+            hexCorFundoCard: formEstabelecimento.hexCorFundoCard?.value || "#ffffff",
+            itensCardapio: itensPendentes,
+        };
+        
         const response = await fetch("https://projetointegrado-kper.onrender.com/creator/gerarCardapio", {
             method: "POST",
             headers: {
@@ -88,16 +233,19 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
         itensPendentes = [];
         
         exibirModalSucesso(data);
-        
         formEstabelecimento.reset();
         carregarItens();
+        
+        // Resetar estado após sucesso
+        nomeEstabelecimentoAtual = '';
+        estabelecimentoExiste = false;
+        atualizarBotaoSubmit(false, 'Digite um nome para o estabelecimento');
 
     } catch (error) {
-        console.error("Erro ao adicionar item:", error);
+        console.error("Erro ao gerar cardápio:", error);
         alert("Erro ao gerar cardápio. Tente novamente.");
     }
 });
-
 function exibirModalSucesso(data) {
 
     const qrcodeDiv = document.getElementById("qrcode");

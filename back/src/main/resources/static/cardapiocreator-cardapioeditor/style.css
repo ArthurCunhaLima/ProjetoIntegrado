@@ -506,3 +506,16 @@ body::after {
         padding: 0 1rem;
     }
 }
+#mensagem-validacao {
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+button[type="submit"]:disabled {
+    background-color: #6c757d !important;
+}
+
+button[type="submit"]:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
