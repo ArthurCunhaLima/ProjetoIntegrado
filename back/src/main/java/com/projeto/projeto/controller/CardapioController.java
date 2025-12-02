@@ -24,9 +24,10 @@ public class  CardapioController {
         return cardapioService.retornar();
     }
 
-    @GetMapping("/config/buscar")
-    public Cardapio buscarporNome(@RequestParam String nome){
-        return cardapioService.buscarPorNome(nome);
+    @GetMapping("/config/buscar/{nome}")
+    public Cardapio buscarporNome(@PathVariable String nome){
+        String nomeFormatado = nome.replace("-", " ");
+        return cardapioService.buscarPorNome(nomeFormatado);
     }
     
     @DeleteMapping("/config/excluir")

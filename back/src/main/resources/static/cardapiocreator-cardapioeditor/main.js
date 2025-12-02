@@ -31,7 +31,7 @@ async function verificarNomeEstabelecimento(nome) {
         return { disponivel: !estabelecimentoExiste };
     }
     
-    const verificaURL = `https://projetointegrado-kper.onrender.com/cardapio/${encodeURIComponent(nomeFormatado)}`;
+    const verificaURL = `https://projetointegrado-kper.onrender.com/cardapio/config/buscar/${encodeURIComponent(nomeFormatado)}`;
     
     try {
         const verificaResponse = await fetch(verificaURL, {
