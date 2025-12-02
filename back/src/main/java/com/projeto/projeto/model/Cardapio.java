@@ -18,25 +18,28 @@ public class Cardapio {
     private String hexCorFundoCard;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Item> itensCardapio;
-
+    private String temaPredefinido;
 
 
     public Cardapio(){
     }
-    public Cardapio(String hexFundo, String hexTexto, String url, String nomeEstabelecimento, List<Item> itensCardapio) {
+    public Cardapio(String hexFundo, String hexTexto, String url, String nomeEstabelecimento, List<Item> itensCardapio, String temaPredefinido) {
         this.hexFundo = hexFundo;
         this.hexTexto = hexTexto;
         this.url = url;
         this.nomeEstabelecimento = nomeEstabelecimento;
         this.itensCardapio = itensCardapio;
+        this.temaPredefinido = temaPredefinido;
     }
 
-    public Cardapio(String nomeEstabelecimento, String hexFundo, String hexTexto, List<Item> itensCardapio) {
+    public Cardapio(String nomeEstabelecimento, String hexFundo, String hexTexto, List<Item> itensCardapio, String temaPredefinido) {
         this.hexFundo = hexFundo;
         this.hexTexto = hexTexto;
         this.nomeEstabelecimento = nomeEstabelecimento;
         this.itensCardapio = itensCardapio;
+        this.temaPredefinido = temaPredefinido;
     }
+
 
     public long getId() {
         return id;
@@ -100,5 +103,12 @@ public class Cardapio {
 
     public void setHexCorFundoCard(String hexCorFundoCard) {
         this.hexCorFundoCard = hexCorFundoCard;
+    }
+    public String getTemaPredefinido() {
+        return temaPredefinido;
+    }
+
+    public void setTemaPredefinido(String temaPredefinido) {
+        this.temaPredefinido = temaPredefinido;
     }
 }

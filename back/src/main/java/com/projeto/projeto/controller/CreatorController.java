@@ -44,7 +44,7 @@ public class CreatorController {
 
         String nomeFormatado = nomeEstabelecimento.replace("-", " ");
 
-            
+
         model.addAttribute("cardapio",
                 cardapioService.obterCardapioPeloNomeUrl(nomeEstabelecimento));
 
