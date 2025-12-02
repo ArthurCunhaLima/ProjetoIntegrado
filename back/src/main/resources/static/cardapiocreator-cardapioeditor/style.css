@@ -519,3 +519,35 @@ button[type="submit"]:not(:disabled):hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
+/* Estilos para os seletores de tema */
+.theme-preview {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-check:checked + .btn-outline-primary {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.btn-check:checked + .btn-outline-primary .theme-preview {
+    box-shadow: 0 0 0 2px #0d6efd;
+}
+
+.btn-check:checked + .btn-outline-primary .text-muted {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+/* Preview em tempo real dos temas */
+.theme-preview-sm {
+    width: 60px;
+    height: 40px;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    border: 1px solid #dee2e6;
+}

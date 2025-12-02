@@ -1,242 +1,91 @@
-* {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+/* tema-claro (default) */
+.cardapio-theme.tema-claro {
+    --cor-fundo-pagina: #f5f7fa;
+    --cor-fundo-card: #ffffff;
+    --cor-fundo-header: #ffffff;
+    --cor-texto-header: #333333;
+    --cor-fundo-footer: #f8f9fa;
+    --cor-texto-footer: #6c757d;
+    --cor-borda: #dee2e6;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    transition: all 0.3s ease;
-    font-weight: 500;
+/* tema-classico */
+.cardapio-theme.tema-classico {
+    --cor-fundo-pagina: #f8f9fa;
+    --cor-fundo-card: #ffffff;
+    --cor-fundo-header: #2c3e50;
+    --cor-texto-header: #ffffff;
+    --cor-fundo-footer: #2c3e50;
+    --cor-texto-footer: #ecf0f1;
+    --cor-borda: #dee2e6;
 }
 
-main {
-    flex: 1;
+/* tema-moderno */
+.cardapio-theme.tema-moderno {
+    --cor-fundo-pagina: #f8f9fa;
+    --cor-fundo-card: #ffffff;
+    --cor-fundo-header: #3498db;
+    --cor-texto-header: #ffffff;
+    --cor-fundo-footer: #2980b9;
+    --cor-texto-footer: #ecf0f1;
+    --cor-borda: #e3f2fd;
+}
+
+/* tema-elegante */
+.cardapio-theme.tema-elegante {
+    --cor-fundo-pagina: #FFF8DC;
+    --cor-fundo-card: #ffffff;
+    --cor-fundo-header: #8B4513;
+    --cor-texto-header: #ffffff;
+    --cor-fundo-footer: #A0522D;
+    --cor-texto-footer: #FAEBD7;
+    --cor-borda: #DEB887;
+}
+
+/* tema-escuro */
+.cardapio-theme.tema-escuro {
+    --cor-fundo-pagina: #2d2d2d;
+    --cor-fundo-card: #3d3d3d;
+    --cor-fundo-header: #1a1a1a;
+    --cor-texto-header: #ffffff;
+    --cor-fundo-footer: #1a1a1a;
+    --cor-texto-footer: #b0b0b0;
+    --cor-borda: #4a4a4a;
+    color: #e0e0e0;
+}
+
+/* Aplicando as variáveis CSS */
+.cardapio-theme {
+    background-color: var(--cor-fundo-pagina);
+    color: var(--cor-texto-body, inherit);
 }
 
 .cardapio-header {
-    background: linear-gradient(135deg, rgba(44,62,80,0.95), rgba(52,73,94,0.95));
-    color: white;
-    padding: 4rem 0;
-    margin-bottom: 3rem;
-    text-align: center;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    position: relative;
-    overflow: hidden;
-}
-
-.cardapio-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(33, 150, 243, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-}
-
-.cardapio-header .container-cardapio {
-    position: relative;
-    z-index: 1;
-}
-
-.cardapio-header h1 {
-    font-size: 3.2rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    letter-spacing: -1px;
+    background-color: var(--cor-fundo-header);
+    color: var(--cor-texto-header);
+    padding: 2rem 0;
+    margin-bottom: 2rem;
 }
 
 .cardapio-header .subtitle {
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1.1rem;
-    opacity: 0.95;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-}
-
-.categoria-section {
-    margin-bottom: 4rem;
-}
-
-.categoria-title {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 3px solid;
-    display: inline-block;
-    letter-spacing: -0.5px;
+    margin-top: 0.5rem;
 }
 
 .item-card {
-    border: none;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1.5rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-    position: relative;
-}
-
-.item-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s ease;
-    z-index: 1;
+    background-color: var(--cor-fundo-card);
+    border: 1px solid var(--cor-borda);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .item-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-}
-
-.item-card:hover::before {
-    left: 100%;
-}
-
-.item-card .card-body {
-    padding: 2rem;
-    position: relative;
-    z-index: 2;
-}
-
-.item-nome {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 0.8rem;
-    color: inherit;
-    letter-spacing: -0.3px;
-}
-
-.item-preco {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: #4CAF50;
-    margin-bottom: 1rem;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: rgba(76, 175, 80, 0.1);
-    border-radius: 8px;
-}
-
-.item-descricao {
-    color: #7f8c8d;
-    font-size: 0.98rem;
-    line-height: 1.7;
-    margin-bottom: 0;
-    font-weight: 500;
-}
-
-.categoria-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-}
-
-.container-cardapio {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 4rem 1rem;
-    color: #7f8c8d;
-}
-
-.empty-state i {
-    font-size: 4.5rem;
-    margin-bottom: 1.5rem;
-    opacity: 0.4;
-    color: #cbd5e0;
-    display: block;
-}
-
-.empty-state h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-}
-
-.empty-state p {
-    font-size: 1rem;
-    margin: 0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 footer {
-    background: linear-gradient(135deg, rgba(44,62,80,0.95), rgba(52,73,94,0.95));
-    border-top: 1px solid rgba(255,255,255,0.1);
-    margin-top: 4rem;
-}
-
-footer small {
-    font-weight: 500;
-}
-
-@media (max-width: 768px) {
-    .cardapio-header {
-        padding: 2.5rem 0;
-    }
-    
-    .cardapio-header h1 {
-        font-size: 2.2rem;
-    }
-    
-    .cardapio-header .subtitle {
-        font-size: 1rem;
-    }
-    
-    .categoria-title {
-        font-size: 1.8rem;
-    }
-    
-    .categoria-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .item-card .card-body {
-        padding: 1.5rem;
-    }
-    
-    .item-nome {
-        font-size: 1.2rem;
-    }
-    
-    .item-preco {
-        font-size: 1.4rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .cardapio-header {
-        padding: 2rem 0;
-    }
-    
-    .cardapio-header h1 {
-        font-size: 1.8rem;
-    }
-    
-    .categoria-title {
-        font-size: 1.4rem;
-    }
-    
-    .container-cardapio {
-        padding: 0 1rem;
-    }
-    
-    .item-card .card-body {
-        padding: 1.25rem;
-    }
+    background-color: var(--cor-fundo-footer);
+    color: var(--cor-texto-footer);
+    margin-top: 3rem;
 }

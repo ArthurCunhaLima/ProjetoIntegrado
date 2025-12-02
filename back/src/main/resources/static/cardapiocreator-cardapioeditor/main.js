@@ -413,6 +413,24 @@ async function carregarItens() {
         ul.appendChild(itemElement);
     });
 }
+// Toggle para cores avançadas
+document.getElementById('toggleCoresAvancadas')?.addEventListener('change', function(e) {
+    const coresAvancadas = document.getElementById('coresAvancadas');
+    if (e.target.checked) {
+        coresAvancadas.style.display = 'block';
+    } else {
+        coresAvancadas.style.display = 'none';
+    }
+});
+
+// Atualizar preview quando tema for selecionado
+document.querySelectorAll('input[name="temaPredefinido"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        // Aqui você pode adicionar lógica para mostrar um preview do tema
+        console.log('Tema selecionado:', this.value);
+    });
+});
+
 
 function removerItem(index) {
     itensPendentes.splice(index, 1);

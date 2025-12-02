@@ -77,50 +77,128 @@
                 </div>
                 
                 <div class="card">
-                    <div class="card-body">
-                        <h2 class="h4 mb-3">
-                            <i class="bi bi-building me-2"></i>Informações do Estabelecimento
-                        </h2>
-                        <p class="text-muted mb-4">Configure os dados e aparência do seu cardápio digital</p>
-                        <form method="post" id="inputFinal">
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label for="nomeEstabelecimento" class="form-label">Nome do Restaurante</label>
-                                    <input type="text" class="form-control" name="nomeEstabelecimento" required placeholder="Ex: Pizzaria Italia">
+    <div class="card-body">
+        <h2 class="h4 mb-3">
+            <i class="bi bi-palette me-2"></i>Personalize a Aparência
+        </h2>
+        <p class="text-muted mb-4">Escolha um tema para seu cardápio digital</p>
+        <form method="post" id="inputFinal">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="nomeEstabelecimento" class="form-label">Nome do Restaurante</label>
+                    <input type="text" class="form-control" name="nomeEstabelecimento" required placeholder="Ex: Pizzaria Italia">
+                </div>
+                
+                <!-- Seletor de Tema Predefinido -->
+                <div class="col-12">
+                    <label class="form-label">Escolha um Tema</label>
+                    <div class="row g-3" id="temaSelector">
+                        <!-- Tema Clássico -->
+                        <div class="col-6 col-md-3">
+                            <input type="radio" class="btn-check" name="temaPredefinido" value="classico" id="temaClassico" checked>
+                            <label class="btn btn-outline-primary w-100 h-100 p-3" for="temaClassico">
+                                <div class="theme-preview mb-2">
+                                    <div class="theme-header" style="background: #2c3e50; height: 8px; border-radius: 4px 4px 0 0;"></div>
+                                    <div class="theme-body" style="background: #ffffff; height: 20px; border: 1px solid #dee2e6; border-top: none;"></div>
                                 </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="hexCorFundoPagina" class="form-label">
-                                        <i class="bi bi-paint-bucket me-1"></i>Cor de Fundo da Página
-                                    </label>
-                                    <input type="color" class="form-control color-input" name="hexCorFundoPagina" value="#f5f7fa" title="Escolha a cor de fundo da página">
+                                <i class="bi bi-building fs-4 d-block mb-2"></i>
+                                <span class="d-block">Clássico</span>
+                                <small class="text-muted d-block">Profissional</small>
+                            </label>
+                        </div>
+                        
+                        <!-- Tema Moderno -->
+                        <div class="col-6 col-md-3">
+                            <input type="radio" class="btn-check" name="temaPredefinido" value="moderno" id="temaModerno">
+                            <label class="btn btn-outline-primary w-100 h-100 p-3" for="temaModerno">
+                                <div class="theme-preview mb-2">
+                                    <div class="theme-header" style="background: #3498db; height: 8px; border-radius: 4px 4px 0 0;"></div>
+                                    <div class="theme-body" style="background: #f8f9fa; height: 20px;"></div>
                                 </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="hexCorFundoCard" class="form-label">
-                                        <i class="bi bi-card-heading me-1"></i>Cor de Fundo dos Itens
-                                    </label>
-                                    <input type="color" class="form-control color-input" name="hexCorFundoCard" value="#ffffff" title="Escolha a cor de fundo dos cards">
+                                <i class="bi bi-stars fs-4 d-block mb-2"></i>
+                                <span class="d-block">Moderno</span>
+                                <small class="text-muted d-block">Clean</small>
+                            </label>
+                        </div>
+                        
+                        <!-- Tema Elegante -->
+                        <div class="col-6 col-md-3">
+                            <input type="radio" class="btn-check" name="temaPredefinido" value="elegante" id="temaElegante">
+                            <label class="btn btn-outline-primary w-100 h-100 p-3" for="temaElegante">
+                                <div class="theme-preview mb-2">
+                                    <div class="theme-header" style="background: #8B4513; height: 8px; border-radius: 4px 4px 0 0;"></div>
+                                    <div class="theme-body" style="background: #FFF8DC; height: 20px;"></div>
                                 </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="hexFundo" class="form-label">
-                                        <i class="bi bi-paint-bucket me-1"></i>Cor do Cabeçalho e Rodapé
-                                    </label>
-                                    <input type="color" class="form-control color-input" name="hexFundo" value="#000000" title="Escolha a cor do fundo do header">
+                                <i class="bi bi-cup-straw fs-4 d-block mb-2"></i>
+                                <span class="d-block">Elegante</span>
+                                <small class="text-muted d-block">Sofisticado</small>
+                            </label>
+                        </div>
+                        
+                        <!-- Tema Escuro -->
+                        <div class="col-6 col-md-3">
+                            <input type="radio" class="btn-check" name="temaPredefinido" value="escuro" id="temaEscuro">
+                            <label class="btn btn-outline-primary w-100 h-100 p-3" for="temaEscuro">
+                                <div class="theme-preview mb-2">
+                                    <div class="theme-header" style="background: #1a1a1a; height: 8px; border-radius: 4px 4px 0 0;"></div>
+                                    <div class="theme-body" style="background: #2d2d2d; height: 20px;"></div>
                                 </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="hexTexto" class="form-label">
-                                        <i class="bi bi-type me-1"></i>Cor do texto
-                                    </label>
-                                    <input type="color" class="form-control color-input" name="hexTexto" value="#ffffff" title="Escolha a cor do texto">
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-primary w-100 py-2" id="gerarCardapio">
-                                        <i class="bi bi-file-earmark-text me-2"></i>Gerar Cardápio
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                                <i class="bi bi-moon-stars fs-4 d-block mb-2"></i>
+                                <span class="d-block">Escuro</span>
+                                <small class="text-muted d-block">Moderna</small>
+                            </label>
+                        </div>
                     </div>
                 </div>
+                
+                <!-- Opção Avançada (escondida por padrão) -->
+                <div class="col-12">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="toggleCoresAvancadas">
+                        <label class="form-check-label" for="toggleCoresAvancadas">
+                            Personalização avançada de cores
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Cores Avançadas (escondidas inicialmente) -->
+                <div id="coresAvancadas" class="row g-3 mt-2" style="display: none;">
+                    <div class="col-12 col-md-6">
+                        <label for="hexCorFundoPagina" class="form-label">
+                            <i class="bi bi-paint-bucket me-1"></i>Cor de Fundo da Página
+                        </label>
+                        <input type="color" class="form-control color-input" name="hexCorFundoPagina" value="#f5f7fa">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="hexCorFundoCard" class="form-label">
+                            <i class="bi bi-card-heading me-1"></i>Cor de Fundo dos Itens
+                        </label>
+                        <input type="color" class="form-control color-input" name="hexCorFundoCard" value="#ffffff">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="hexFundo" class="form-label">
+                            <i class="bi bi-paint-bucket me-1"></i>Cor do Cabeçalho e Rodapé
+                        </label>
+                        <input type="color" class="form-control color-input" name="hexFundo" value="#000000">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="hexTexto" class="form-label">
+                            <i class="bi bi-type me-1"></i>Cor do texto
+                        </label>
+                        <input type="color" class="form-control color-input" name="hexTexto" value="#ffffff">
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary w-100 py-2" id="gerarCardapio">
+                        <i class="bi bi-file-earmark-text me-2"></i>Gerar Cardápio
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
             </div>
         </div>
     </div>
