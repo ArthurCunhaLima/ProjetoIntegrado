@@ -30,9 +30,11 @@ public class CardapioService {
         Cardapio novoCardapio = new Cardapio(cardapio.getNomeEstabelecimento()
                 , cardapio.getHexFundo(),
                 cardapio.getHexTexto(),
-                cardapio.getItensCardapio());
+                cardapio.getItensCardapio(),
+                cardapio.getTemaPredefinido());
         novoCardapio.setHexCorFundoPagina(cardapio.getHexCorFundoPagina());
         novoCardapio.setHexCorFundoCard(cardapio.getHexCorFundoCard());
+        
         Cardapio cardapioSalvo = cardapioRepository.save(novoCardapio);
         
         // Gerar URL do cardápio de forma dinâmica
@@ -59,7 +61,8 @@ public class CardapioService {
         Cardapio novoCardapio = new Cardapio(cardapio.getNomeEstabelecimento()
                 ,cardapio.getHexFundo(),
                 cardapio.getHexTexto(),
-                cardapio.getItensCardapio());
+                cardapio.getItensCardapio(),
+                cardapio.getTemaPredefinido());
         return cardapioRepository.save(novoCardapio);
     }
 
@@ -90,6 +93,7 @@ public class CardapioService {
             cardapioExistente.setHexCorFundoPagina(cardapio.getHexCorFundoPagina());
             cardapioExistente.setHexCorFundoCard(cardapio.getHexCorFundoCard());
             cardapioExistente.setItensCardapio(cardapio.getItensCardapio());
+            cardapioExistente.setTemaPredefinido(cardapio.getTemaPredefinido());
 
             return cardapioRepository.save(cardapioExistente);
         }
