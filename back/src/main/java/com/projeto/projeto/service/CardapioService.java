@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -66,7 +67,7 @@ public class CardapioService {
         return cardapioRepository.findAll();
     }
 
-    public Cardapio buscarPorNome(String nomeEstabelecimento){
+    public Optional<Cardapio> buscarPorNome(String nomeEstabelecimento){
         return cardapioRepository.findByNomeEstabelecimento(nomeEstabelecimento);
     }
 
