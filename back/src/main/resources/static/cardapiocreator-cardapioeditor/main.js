@@ -1,41 +1,22 @@
-document.addEventListener("DOMContentLoaded", carregarItens);
-
+// ==================== VARIÁVEIS GLOBAIS ====================
 let itensPendentes = [];
-
-const valorInput = document.getElementById("valor");
-if (valorInput) {
-    valorInput.addEventListener("input", function(e) {
-        let valor = e.target.value.replace(/\D/g, "");
-        if (valor) {
-            valor = (parseInt(valor) / 100).toFixed(2);
-            e.target.value = valor;
-        }
-    });
-}
-
-document.getElementById("inputItem").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    
-    const form = e.target;
-    const dados = {
-        nome: form.nome.value,
-        valor: parseFloat(form.valor.value),
-        descricao: form.descricao.value
-    };
-    
-    itensPendentes.push(dados);
-
-    console.log("Item adicionado localmente:", dados);
-    console.log("Itens pendentes:", itensPendentes);
-    
-    carregarItens();
-    form.reset();
-});
-
-// Adiciona estas variáveis globais (se já não existirem)
 let nomeEstabelecimentoAtual = '';
 let estabelecimentoExiste = false;
 let timeoutVerificacao = null;
+let enviandoFormulario = false;
+let ultimoClique = 0;
+const intervaloMinimo = 2000; // 2 segundos entre cliques
+
+// ==================== INICIALIZAÇÃO ====================
+document.addEventListener("DOMContentLoaded", function() {
+    carregarItens();
+    inicializarValidacaoNome();
+    inicializarFormatacaoValor();
+    inicializarFormularioItem();
+    inicializarModalSucesso();
+});
+
+// ==================== FUNÇÕES DE VALIDAÇÃO DE NOME ====================
 
 // Função para verificar disponibilidade do nome
 async function verificarNomeEstabelecimento(nome) {
@@ -94,22 +75,35 @@ async function verificarNomeEstabelecimento(nome) {
 }
 
 // Função para atualizar o estado do botão
-function atualizarBotaoSubmit(disponivel, motivo = '') {
+function atualizarBotaoSubmit(disponivel, motivo = '', enviando = false) {
     const botaoSubmit = document.querySelector('#inputFinal button[type="submit"]');
     const mensagemElemento = document.getElementById('mensagem-validacao') || criarElementoMensagem();
     
     if (!botaoSubmit) return;
     
+    if (enviando) {
+        // Estado de envio em progresso
+        botaoSubmit.disabled = true;
+        botaoSubmit.style.opacity = '0.7';
+        botaoSubmit.style.cursor = 'wait';
+        botaoSubmit.innerHTML = '<i class="bi bi-hourglass-split"></i> Enviando...';
+        mensagemElemento.textContent = 'Enviando cardápio...';
+        mensagemElemento.style.color = '#007bff';
+        return;
+    }
+    
     if (disponivel) {
         botaoSubmit.disabled = false;
         botaoSubmit.style.opacity = '1';
         botaoSubmit.style.cursor = 'pointer';
+        botaoSubmit.innerHTML = '<i class="bi bi-check-circle"></i> Gerar Cardápio';
         mensagemElemento.textContent = '✓ Nome disponível';
         mensagemElemento.style.color = '#28a745';
     } else {
         botaoSubmit.disabled = true;
         botaoSubmit.style.opacity = '0.5';
         botaoSubmit.style.cursor = 'not-allowed';
+        botaoSubmit.innerHTML = '<i class="bi bi-card-checklist"></i> Gerar Cardápio';
         
         if (motivo) {
             mensagemElemento.textContent = `✗ ${motivo}`;
@@ -134,8 +128,8 @@ function criarElementoMensagem() {
     return mensagemElemento;
 }
 
-// Adiciona evento de input com debounce ao campo de nome
-document.addEventListener('DOMContentLoaded', function() {
+// Inicializa a validação do nome
+function inicializarValidacaoNome() {
     const nomeInput = document.querySelector('#inputFinal input[name="nomeEstabelecimento"]');
     
     if (nomeInput) {
@@ -178,11 +172,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
+}
 
-// Event listener do submit MODIFICADO
+// ==================== FORMULÁRIO FINAL (GERAR CARDÁPIO) ====================
+
 document.getElementById("inputFinal").addEventListener("submit", async (e) => {
     e.preventDefault();
+    
+    // Previne múltiplos envios simultâneos
+    if (enviandoFormulario) {
+        console.log("Formulário já está sendo enviado. Aguarde...");
+        return;
+    }
+    
+    // Previne cliques muito rápidos
+    const agora = Date.now();
+    if (agora - ultimoClique < intervaloMinimo) {
+        console.log("Aguarde antes de clicar novamente");
+        return;
+    }
+    ultimoClique = agora;
     
     if (itensPendentes.length === 0) {
         alert("Nenhum item para enviar!");
@@ -198,11 +207,16 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
         return;
     }
     
+    // Marca que o formulário está sendo enviado
+    enviandoFormulario = true;
+    atualizarBotaoSubmit(false, '', true); // Estado de "enviando"
+    
     // Verifica uma última vez antes de enviar
     const verificacaoFinal = await verificarNomeEstabelecimento(nomeEstabelecimento);
     if (!verificacaoFinal.disponivel) {
         alert(`Não foi possível criar: ${verificacaoFinal.motivo}`);
         atualizarBotaoSubmit(false, verificacaoFinal.motivo);
+        enviandoFormulario = false; // Libera o formulário
         return;
     }
     
@@ -239,15 +253,98 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
         // Resetar estado após sucesso
         nomeEstabelecimentoAtual = '';
         estabelecimentoExiste = false;
+        enviandoFormulario = false; // Libera o formulário
         atualizarBotaoSubmit(false, 'Digite um nome para o estabelecimento');
 
     } catch (error) {
         console.error("Erro ao gerar cardápio:", error);
         alert("Erro ao gerar cardápio. Tente novamente.");
+        
+        // Restaura o botão em caso de erro
+        enviandoFormulario = false;
+        
+        // Verifica novamente o estado atual do nome
+        const nomeAtual = formEstabelecimento.nomeEstabelecimento.value.trim();
+        if (nomeAtual) {
+            const resultado = await verificarNomeEstabelecimento(nomeAtual);
+            atualizarBotaoSubmit(resultado.disponivel, resultado.motivo);
+        } else {
+            atualizarBotaoSubmit(false, 'Digite um nome para o estabelecimento');
+        }
     }
 });
-function exibirModalSucesso(data) {
 
+// ==================== FORMATAÇÃO DE VALOR ====================
+
+function inicializarFormatacaoValor() {
+    const valorInput = document.getElementById("valor");
+    if (valorInput) {
+        valorInput.addEventListener("input", function(e) {
+            let valor = e.target.value.replace(/\D/g, "");
+            if (valor) {
+                valor = (parseInt(valor) / 100).toFixed(2);
+                e.target.value = valor;
+            }
+        });
+    }
+}
+
+// ==================== FORMULÁRIO DE ITEM ====================
+
+function inicializarFormularioItem() {
+    document.getElementById("inputItem").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const form = e.target;
+        const dados = {
+            nome: form.nome.value,
+            valor: parseFloat(form.valor.value),
+            descricao: form.descricao.value
+        };
+        
+        // Validação básica
+        if (!dados.nome || !dados.valor) {
+            alert("Por favor, preencha pelo menos o nome e o valor do item!");
+            return;
+        }
+        
+        itensPendentes.push(dados);
+
+        console.log("Item adicionado localmente:", dados);
+        console.log("Itens pendentes:", itensPendentes);
+        
+        carregarItens();
+        form.reset();
+    });
+}
+
+// ==================== MODAL DE SUCESSO ====================
+
+function inicializarModalSucesso() {
+    document.getElementById("copyLinkBtn").addEventListener("click", () => {
+        if (window.cardapioUrl) {
+            navigator.clipboard.writeText(window.cardapioUrl).then(() => {
+                // Feedback visual melhorado
+                const btn = document.getElementById("copyLinkBtn");
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+                btn.classList.remove("btn-primary");
+                btn.classList.add("btn-success");
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.remove("btn-success");
+                    btn.classList.add("btn-primary");
+                }, 2000);
+            }).catch(err => {
+                console.error("Erro ao copiar:", err);
+                alert("Erro ao copiar link. Tente novamente.");
+            });
+        }
+    });
+}
+
+function exibirModalSucesso(data) {
     const qrcodeDiv = document.getElementById("qrcode");
     qrcodeDiv.innerHTML = `<img src="${data.qrCodeDataUrl}" alt="QR Code" style="max-width: 250px; border-radius: 8px;">`;
     
@@ -267,15 +364,7 @@ function exibirModalSucesso(data) {
     modal.show();
 }
 
-document.getElementById("copyLinkBtn").addEventListener("click", () => {
-    if (window.cardapioUrl) {
-        navigator.clipboard.writeText(window.cardapioUrl).then(() => {
-            alert("Link copiado para a área de transferência!");
-        }).catch(err => {
-            console.error("Erro ao copiar:", err);
-        });
-    }
-});
+// ==================== LISTAGEM DE ITENS ====================
 
 async function carregarItens() {
     const itens = itensPendentes;
@@ -329,5 +418,3 @@ function removerItem(index) {
     itensPendentes.splice(index, 1);
     carregarItens();
 }
-
-carregarItens();
