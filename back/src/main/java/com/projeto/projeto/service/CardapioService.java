@@ -73,30 +73,32 @@ public class CardapioService {
 
     public Cardapio obterCardapioPeloNomeUrl(String nomeCardapioUrl) {
         String nomeFormatado = nomeCardapioUrl.replace("-", " ");
-        return cardapioRepository.findByNomeEstabelecimento(nomeFormatado);
+        return cardapioRepository.findByNomeEstabelecimento(nomeFormatado)
+                .orElse(null);
     }
 
     public Cardapio atualizarCardapio(Cardapio cardapio) {
-        Cardapio cardapioExistente = cardapioRepository.findByNomeEstabelecimento(cardapio.getNomeEstabelecimento());
-        
-        if (cardapioExistente != null) {
+        Optional<Cardapio> cardapioExistenteOpt = cardapioRepository.findByNomeEstabelecimento(
+                cardapio.getNomeEstabelecimento()
+        );
+
+        if (cardapioExistenteOpt.isPresent()) {
+            Cardapio cardapioExistente = cardapioExistenteOpt.get();
             cardapioExistente.setHexFundo(cardapio.getHexFundo());
             cardapioExistente.setHexTexto(cardapio.getHexTexto());
             cardapioExistente.setHexCorFundoPagina(cardapio.getHexCorFundoPagina());
             cardapioExistente.setHexCorFundoCard(cardapio.getHexCorFundoCard());
             cardapioExistente.setItensCardapio(cardapio.getItensCardapio());
-            
+
             return cardapioRepository.save(cardapioExistente);
         }
-        
+
         return null;
     }
-    
+
     public void excluirCardapio(String nomeEstabelecimento) {
-        Cardapio cardapio = cardapioRepository.findByNomeEstabelecimento(nomeEstabelecimento);
-        if (cardapio != null) {
-            cardapioRepository.delete(cardapio);
-        }
+        cardapioRepository.findByNomeEstabelecimento(nomeEstabelecimento)
+                .ifPresent(cardapio -> cardapioRepository.delete(cardapio));
     }
 }
 
