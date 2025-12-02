@@ -34,7 +34,7 @@ public class CardapioService {
                 cardapio.getTemaPredefinido());
         novoCardapio.setHexCorFundoPagina(cardapio.getHexCorFundoPagina());
         novoCardapio.setHexCorFundoCard(cardapio.getHexCorFundoCard());
-        
+
         Cardapio cardapioSalvo = cardapioRepository.save(novoCardapio);
         
         // Gerar URL do cardápio de forma dinâmica

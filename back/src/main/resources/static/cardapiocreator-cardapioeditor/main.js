@@ -43,17 +43,13 @@ async function verificarNomeEstabelecimento(nome) {
 
         // Se o status for 200, o estabelecimento existe
         if (verificaResponse.ok) {
-            const verificaData = await verificaResponse.json();
-            const existe = verificaData.existe || verificaData.estabelecimento;
-            
-            // Atualiza cache
-            nomeEstabelecimentoAtual = nomeFormatado;
-            estabelecimentoExiste = !!existe;
-            
+                nomeEstabelecimentoAtual = nomeFormatado;
+            estabelecimentoExiste = true;
+    
             return { 
-                disponivel: !existe, 
-                motivo: existe ? 'Estabelecimento já existe' : 'Disponível'
-            };
+                disponivel: false, 
+                motivo: 'Estabelecimento já existe'
+        };
         } 
         // Se for 404, não existe - disponível
         else if (verificaResponse.status === 404) {
@@ -229,6 +225,7 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
             hexCorFundoPagina: formEstabelecimento.hexCorFundoPagina?.value || "#f5f7fa",
             hexCorFundoCard: formEstabelecimento.hexCorFundoCard?.value || "#ffffff",
             itensCardapio: itensPendentes,
+            temaPredefinido: formEstabelecimento.temaPredefinido.value,
         };
         
         const response = await fetch("https://projetointegrado-kper.onrender.com/creator/gerarCardapio", {
