@@ -220,10 +220,6 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
     try {
         const payload = {
             nomeEstabelecimento: nomeEstabelecimento,
-            hexFundo: formEstabelecimento.hexFundo.value,
-            hexTexto: formEstabelecimento.hexTexto.value,
-            hexCorFundoPagina: formEstabelecimento.hexCorFundoPagina?.value || "#f5f7fa",
-            hexCorFundoCard: formEstabelecimento.hexCorFundoCard?.value || "#ffffff",
             itensCardapio: itensPendentes,
             temaPredefinido: formEstabelecimento.temaPredefinido.value,
         };
