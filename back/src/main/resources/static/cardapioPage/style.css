@@ -11,6 +11,7 @@
 
 /* tema-classico */
 .cardapio-theme.tema-classico {
+    --cor-item-preco: #2c3e50;
     --cor-fundo-pagina: #f8f9fa;
     --cor-fundo-card: #ffffff;
     --cor-fundo-header: #2c3e50;
@@ -22,6 +23,7 @@
 
 /* tema-moderno */
 .cardapio-theme.tema-moderno {
+    --cor-item-preco: #3498db;
     --cor-fundo-pagina: #f8f9fa;
     --cor-fundo-card: #ffffff;
     --cor-fundo-header: #3498db;
@@ -33,8 +35,9 @@
 
 /* tema-elegante */
 .cardapio-theme.tema-elegante {
+    --cor-item-preco: #8B4513;
     --cor-fundo-pagina: #FFF8DC;
-    --cor-fundo-card: #ffffff;
+    --cor-fundo-card: #FFF8DC;
     --cor-fundo-header: #8B4513;
     --cor-texto-header: #ffffff;
     --cor-fundo-footer: #A0522D;
@@ -44,8 +47,9 @@
 
 /* tema-escuro */
 .cardapio-theme.tema-escuro {
+    --cor-item-preco: #1a1a1a;
     --cor-fundo-pagina: #2d2d2d;
-    --cor-fundo-card: #3d3d3d;
+    --cor-fundo-card: #ffffff;
     --cor-fundo-header: #1a1a1a;
     --cor-texto-header: #ffffff;
     --cor-fundo-footer: #1a1a1a;
