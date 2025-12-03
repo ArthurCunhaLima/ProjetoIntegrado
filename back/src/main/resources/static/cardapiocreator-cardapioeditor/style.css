@@ -526,6 +526,7 @@ button[type="submit"]:not(:disabled):hover {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+
 .btn-check:checked + .btn-outline-primary {
     background-color: #45a049;
     color: white;
@@ -540,7 +541,6 @@ button[type="submit"]:not(:disabled):hover {
     color: rgba(255,255,255,0.8) !important;
 }
 
-/* Preview em tempo real dos temas */
 .theme-preview-sm {
     width: 60px;
     height: 40px;
@@ -550,4 +550,29 @@ button[type="submit"]:not(:disabled):hover {
     vertical-align: middle;
     margin-right: 10px;
     border: 1px solid #dee2e6;
+}
+#temaSelector .btn-outline-primary {
+    --bs-btn-color: #4CAF50 !important;
+    --bs-btn-border-color: #4CAF50 !important;
+    --bs-btn-hover-color: #fff !important;
+    --bs-btn-hover-bg: #4CAF50 !important;
+    --bs-btn-hover-border-color: #4CAF50 !important;
+    --bs-btn-focus-shadow-rgb: 76, 175, 80 !important; 
+    --bs-btn-active-color: #fff !important;
+    --bs-btn-active-bg: #4CAF50 !important;
+    --bs-btn-active-border-color: #4CAF50 !important;
+    --bs-btn-disabled-color: #4CAF50 !important;
+    --bs-btn-disabled-bg: transparent !important;
+    --bs-btn-disabled-border-color: #4CAF50 !important;
+}
+
+#temaSelector .btn-check:checked + .btn-outline-primary {
+    background-color: #4CAF50 !important;
+    border-color: #4CAF50 !important;
+    color: white !important;
+}
+
+#temaSelector .btn-outline-primary i,
+#temaSelector .btn-outline-primary .bi {
+    color: #4CAF50 !important;
 }
