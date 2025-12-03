@@ -527,13 +527,13 @@ button[type="submit"]:not(:disabled):hover {
 }
 
 .btn-check:checked + .btn-outline-primary {
-    background-color: #0d6efd;
+    background-color: #45a049;
     color: white;
-    border-color: #0d6efd;
+    border-color: #45a049;
 }
 
 .btn-check:checked + .btn-outline-primary .theme-preview {
-    box-shadow: 0 0 0 2px #0d6efd;
+    box-shadow: 0 0 0 2px #45a049;
 }
 
 .btn-check:checked + .btn-outline-primary .text-muted {
