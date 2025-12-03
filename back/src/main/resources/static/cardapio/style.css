@@ -89,3 +89,42 @@ footer {
     color: var(--cor-texto-footer);
     margin-top: 3rem;
 }
+/* Correções específicas para alinhamento */
+.cardapio-theme {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container-cardapio {
+    flex: 1;
+}
+
+/* Ajuste dos cards para grid responsiva */
+.categoria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Mantém o comportamento do card do Bootstrap */
+.item-card {
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Ajuste do preço */
+.item-preco {
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+/* Garante que o footer fique no fundo */
+.cardapio-theme footer {
+    margin-top: auto;
+}

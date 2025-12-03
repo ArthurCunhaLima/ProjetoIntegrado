@@ -198,10 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const payload = {
             nomeEstabelecimento: nomeEstabelecimento,
-            hexFundo: formEstabelecimento.hexFundo.value || "#ffffff",
-            hexTexto: formEstabelecimento.hexTexto.value || "#000000",
-            hexCorFundoPagina: formEstabelecimento.hexCorFundoPagina?.value || "#f5f7fa",
-            hexCorFundoCard: formEstabelecimento.hexCorFundoCard?.value || "#ffffff",
             itensCardapio: itensPendentes
         };
 
@@ -235,19 +231,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Ajuste conforme a estrutura real da sua API
         itensPendentes = cardapio.itensCardapio || cardapio.itens || [];
         
-        // Se a API retornar cores, preencha os campos
-        if (cardapio.hexFundo) {
-            document.getElementById("hexFundo").value = cardapio.hexFundo;
-        }
-        if (cardapio.hexTexto) {
-            document.getElementById("hexTexto").value = cardapio.hexTexto;
-        }
-        if (cardapio.hexCorFundoPagina) {
-            document.getElementById("hexCorFundoPagina").value = cardapio.hexCorFundoPagina;
-        }
-        if (cardapio.hexCorFundoCard) {
-            document.getElementById("hexCorFundoCard").value = cardapio.hexCorFundoCard;
-        }
         
         carregarItens();
     }
