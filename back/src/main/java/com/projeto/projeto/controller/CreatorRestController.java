@@ -32,12 +32,14 @@
             }
         }
 
-        @PutMapping("/atualizarCardapio")
-        public ResponseEntity<?> atualizarCardapio(@RequestBody Cardapio cardapio) {
+        @PutMapping("/atualizarCardapio/{nomeAntigo}")
+        public ResponseEntity<?> atualizarCardapio(
+                @PathVariable String nomeAntigo,
+                @RequestBody Cardapio novoCardapio) {
             try {
-                Cardapio cardapioAtualizado = cardapioService.atualizarCardapio(cardapio);
+                Cardapio cardapioAtualizado = cardapioService.atualizarCardapio(nomeAntigo, novoCardapio);
                 if (cardapioAtualizado == null) {
-                    return ResponseEntity.status(404).body("Cardápio não encontrado: " + cardapio.getNomeEstabelecimento());
+                    return ResponseEntity.status(404).body("Cardápio não encontrado: " + nomeAntigo);
                 }
                 return ResponseEntity.ok(cardapioAtualizado);
             } catch (Exception e) {

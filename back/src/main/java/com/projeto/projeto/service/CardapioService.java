@@ -97,6 +97,37 @@ public class CardapioService {
 
         return null;
     }
+    public Cardapio atualizarCardapio(String nomeAntigo, Cardapio novoCardapio) {
+        Optional<Cardapio> cardapioExistenteOpt = cardapioRepository.findByNomeEstabelecimento(nomeAntigo);
+
+        if (cardapioExistenteOpt.isPresent()) {
+            Cardapio cardapioExistente = cardapioExistenteOpt.get();
+
+            // Atualiza os campos
+            cardapioExistente.setNomeEstabelecimento(novoCardapio.getNomeEstabelecimento());
+            cardapioExistente.setItensCardapio(novoCardapio.getItensCardapio());
+
+            // IMPORTANTE: Preserva o temaPredefinido se não veio no novo
+            if (novoCardapio.getTemaPredefinido() != null && !novoCardapio.getTemaPredefinido().isEmpty()) {
+                cardapioExistente.setTemaPredefinido(novoCardapio.getTemaPredefinido());
+            }
+            // Se não veio tema no novo, mantém o existente
+
+            // Preserva outros campos importantes
+            if (novoCardapio.getHexFundo() != null && !novoCardapio.getHexFundo().isEmpty()) {
+                cardapioExistente.setHexFundo(novoCardapio.getHexFundo());
+            }
+            if (novoCardapio.getHexTexto() != null && !novoCardapio.getHexTexto().isEmpty()) {
+                cardapioExistente.setHexTexto(novoCardapio.getHexTexto());
+            }
+            // ... faça o mesmo para outros campos hex
+
+            return cardapioRepository.save(cardapioExistente);
+        }
+
+        return null;
+    }
+
 
     public void excluirCardapio(String nomeEstabelecimento) {
         cardapioRepository.findByNomeEstabelecimento(nomeEstabelecimento)
