@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let itensPendentes = [];
     let todosCardapios = [];
-    let cardapioCompleto = {}; // ← GUARDA TODO O OBJETO CARDÁPIO
+    let cardapioCompleto = {};
     let nomeEstabelecimentoOriginal = "";
     let temaPredefinidoOriginal = "";
     
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
         form.reset();
     });
 
-    // SALVAR ALTERAÇÕES - SOLUÇÃO 3 (envia todos os campos)
+    // SALVAR ALTERAÇÕES - NOVO ENDPOINT COM nomeAntigo
     document.getElementById("inputFinal").addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -192,23 +192,32 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Reutiliza TODOS os campos do cardápio original
+        // Se não temos um nome original, não podemos atualizar
+        if (!nomeEstabelecimentoOriginal) {
+            alert("Erro: Não foi possível identificar o cardápio original.");
+            return;
+        }
+
+        // Monta o payload com TODOS os campos necessários
         const payload = {
-            id: cardapioCompleto.id || 0,
+            nomeEstabelecimento: nomeEstabelecimento, // NOVO nome
+            itensCardapio: itensPendentes,
+            temaPredefinido: temaPredefinidoOriginal, // ← Sempre envia o tema
             hexFundo: cardapioCompleto.hexFundo || "",
             hexTexto: cardapioCompleto.hexTexto || "",
             url: cardapioCompleto.url || "",
-            nomeEstabelecimento: nomeEstabelecimento, // ← Apenas este campo muda
             hexCorFundoPagina: cardapioCompleto.hexCorFundoPagina || "",
-            hexCorFundoCard: cardapioCompleto.hexCorFundoCard || "",
-            itensCardapio: itensPendentes,
-            temaPredefinido: temaPredefinidoOriginal // ← Mantém o tema original
+            hexCorFundoCard: cardapioCompleto.hexCorFundoCard || ""
         };
 
-        console.log("Enviando payload completo:", JSON.stringify(payload, null, 2));
+        console.log("Enviando payload:", JSON.stringify(payload, null, 2));
+        console.log("Nome antigo (para buscar):", nomeEstabelecimentoOriginal);
+        console.log("Novo nome:", nomeEstabelecimento);
         
         try {
-            const response = await fetch("https://projetointegrado-kper.onrender.com/creator/atualizarCardapio", {
+            // NOVO ENDPOINT: usa nomeAntigo como path variable
+            // Exemplo: PUT /creator/atualizarCardapio/Restaurante%20Teste
+            const response = await fetch(`https://projetointegrado-kper.onrender.com/creator/atualizarCardapio/${encodeURIComponent(nomeEstabelecimentoOriginal)}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
@@ -225,21 +234,66 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Cardápio atualizado com sucesso!");
             console.log("Resposta do servidor:", result);
             
-            // Atualiza o objeto completo com a resposta do servidor
+            // Atualiza as variáveis
             cardapioCompleto = result;
-            nomeEstabelecimentoOriginal = nomeEstabelecimento;
+            nomeEstabelecimentoOriginal = nomeEstabelecimento; // Agora o novo nome é o "original"
             temaPredefinidoOriginal = result.temaPredefinido || temaPredefinidoOriginal;
             
-            // Recarrega a lista de cardápios para mostrar as mudanças
+            // Atualiza também o campo de entrada (já está com o novo nome)
+            
+            // Recarrega a lista para mostrar as mudanças
             carregarListaCardapios();
 
         } catch (error) {
             console.error("Erro ao atualizar cardápio:", error);
             alert("Erro ao atualizar cardápio: " + error.message);
+            
+            // Se for erro 404, oferece criar um novo
+            if (error.message.includes("404")) {
+                if (confirm("Cardápio não encontrado. O cardápio pode ter sido excluído.\n\nDeseja criar um novo cardápio com este nome?")) {
+                    criarNovoCardapio(nomeEstabelecimento);
+                }
+            }
         }
     });
 
-    // Função para carregar dados do cardápio - ATUALIZADA
+    // Função auxiliar para criar novo cardápio (fallback)
+    async function criarNovoCardapio(nomeEstabelecimento) {
+        const payload = {
+            nomeEstabelecimento: nomeEstabelecimento,
+            itensCardapio: itensPendentes,
+            temaPredefinido: temaPredefinidoOriginal || "classico"
+        };
+        
+        try {
+            const response = await fetch("https://projetointegrado-kper.onrender.com/cardapio/config/criar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                alert("Novo cardápio criado com sucesso!");
+                
+                // Atualiza as variáveis
+                cardapioCompleto = result;
+                nomeEstabelecimentoOriginal = nomeEstabelecimento;
+                temaPredefinidoOriginal = result.temaPredefinido || temaPredefinidoOriginal;
+                
+                carregarListaCardapios();
+            } else {
+                throw new Error("Erro ao criar cardápio");
+            }
+        } catch (error) {
+            console.error("Erro ao criar cardápio:", error);
+            alert("Erro ao criar cardápio: " + error.message);
+        }
+    }
+
+    // Função para carregar dados do cardápio
     function carregarDadosCardapio(cardapio) {
         // Guarda TODO o objeto cardápio
         cardapioCompleto = cardapio;
@@ -313,7 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
         carregarItens();
     }
     
-    // Função para excluir cardápio - ATUALIZADA
+    // Função para excluir cardápio
     window.excluirCardapio = async function(nomeEstabelecimento) {
         if (!confirm(`Tem certeza que deseja excluir o cardápio "${nomeEstabelecimento}"?`)) {
             return;
