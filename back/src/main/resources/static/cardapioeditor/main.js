@@ -9,8 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let itensPendentes = [];
     let todosCardapios = []; // Array para armazenar todos os cardápios
-    let nomeEstabelecimentoOriginal = "";
-    let temaPredefinidoOriginal = "";
     
     carregarListaCardapios();
     
@@ -181,35 +179,29 @@ document.addEventListener("DOMContentLoaded", () => {
         form.reset();
     });
 
-    // Salvar alterações - CORRIGIDO
-document.getElementById("inputFinal").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    // Salvar alterações
+    document.getElementById("inputFinal").addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    if (itensPendentes.length === 0) {
-        alert("Nenhum item para salvar!");
-        return;
-    }
+        if (itensPendentes.length === 0) {
+            alert("Nenhum item para salvar!");
+            return;
+        }
 
-    const formEstabelecimento = document.getElementById("inputFinal");
-    const nomeEstabelecimento = formEstabelecimento.nomeEstabelecimento.value;
+        const formEstabelecimento = document.getElementById("inputFinal");
+        const nomeEstabelecimento = formEstabelecimento.nomeEstabelecimento.value;
 
-    if (!nomeEstabelecimento) {
-        alert("Nome do estabelecimento é obrigatório!");
-        return;
-    }
+        if (!nomeEstabelecimento) {
+            alert("Nome do estabelecimento é obrigatório!");
+            return;
+        }
 
-    // ESTRATÉGIA: Sempre usar o nome original para buscar no PUT
-    const payload = {
-        nomeEstabelecimento: nomeEstabelecimento, // Novo nome (se mudou)
-        itensCardapio: itensPendentes,
-        temaPredefinido: temaPredefinidoOriginal // Mantém o tema original
-    };
+        const payload = {
+            nomeEstabelecimento: nomeEstabelecimento,
+            itensCardapio: itensPendentes
+        };
 
-    console.log("Tentando atualizar cardápio:", JSON.stringify(payload, null, 2));
-    
-    try {
-        // Se o nome NÃO mudou, faz PUT normal
-        if (nomeEstabelecimento === nomeEstabelecimentoOriginal) {
+        try {
             const response = await fetch("https://projetointegrado-kper.onrender.com/creator/atualizarCardapio", {
                 method: "PUT",
                 headers: {
@@ -218,70 +210,27 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
                 body: JSON.stringify(payload)
             });
 
-            if (response.ok) {
-                const result = await response.json();
-                alert("Cardápio atualizado com sucesso!");
-                console.log("Resposta do servidor:", result);
-                carregarListaCardapios();
-                return;
+            if (!response.ok) {
+                throw new Error("Erro na requisição: " + response.status);
             }
-        }
-        
-        // Se chegou aqui, é porque o nome MUDOU ou o PUT falhou
-        console.log("Nome mudou ou PUT falhou. Recriando cardápio...");
-        
-        // 1. Primeiro exclui o cardápio antigo (se existir)
-        if (nomeEstabelecimentoOriginal) {
-            try {
-                await fetch(`https://projetointegrado-kper.onrender.com/cardapio/config/excluir?nome=${encodeURIComponent(nomeEstabelecimentoOriginal)}`, {
-                    method: 'DELETE'
-                });
-                console.log("Cardápio antigo excluído:", nomeEstabelecimentoOriginal);
-            } catch (deleteError) {
-                console.warn("Não foi possível excluir cardápio antigo:", deleteError);
-            }
-        }
-        
-        // 2. Cria um novo cardápio com o novo nome
-        const criarResponse = await fetch("https://projetointegrado-kper.onrender.com/cardapio/config/criar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
-        
-        if (criarResponse.ok) {
-            const result = await criarResponse.json();
-            alert("Cardápio recriado com sucesso! (Nome alterado de '" + nomeEstabelecimentoOriginal + "' para '" + nomeEstabelecimento + "')");
-            console.log("Novo cardápio criado:", result);
-            
-            // Atualiza o nome original para o novo nome
-            nomeEstabelecimentoOriginal = nomeEstabelecimento;
-            
-            // Recarrega a lista de cardápios
-            carregarListaCardapios();
-        } else {
-            const errorText = await criarResponse.text();
-            throw new Error("Erro ao criar novo cardápio: " + errorText);
-        }
 
-    } catch (error) {
-        console.error("Erro ao atualizar/criar cardápio:", error);
-        alert("Erro: " + error.message);
-    }
-});
+            const result = await response.json();
+            alert("Cardápio atualizado com sucesso!");
+            console.log("Resposta do servidor:", result);
 
-    // Função para carregar dados do cardápio - CORRIGIDA
+        } catch (error) {
+            console.error("Erro ao atualizar cardápio:", error);
+            alert("Erro ao atualizar cardápio. Tente novamente.");
+        }
+    });
+
+    // Função para carregar dados do cardápio
     function carregarDadosCardapio(cardapio) {
-        // Guarda o nome original E o tema original
-        nomeEstabelecimentoOriginal = cardapio.nomeEstabelecimento || "";
-        temaPredefinidoOriginal = cardapio.temaPredefinido || "";
-        
-        document.getElementById("nomeEstabelecimento").value = nomeEstabelecimentoOriginal;
+        document.getElementById("nomeEstabelecimento").value = cardapio.nomeEstabelecimento || "";
         
         // Ajuste conforme a estrutura real da sua API
         itensPendentes = cardapio.itensCardapio || cardapio.itens || [];
+        
         
         carregarItens();
     }
@@ -348,7 +297,7 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
         carregarItens();
     }
     
-    // Função para excluir cardápio - CORRIGIDA
+    // Função para excluir cardápio
     window.excluirCardapio = async function(nomeEstabelecimento) {
         if (!confirm(`Tem certeza que deseja excluir o cardápio "${nomeEstabelecimento}"?`)) {
             return;
@@ -361,20 +310,6 @@ document.getElementById("inputFinal").addEventListener("submit", async (e) => {
             
             if (response.ok) {
                 alert('Cardápio excluído com sucesso!');
-                
-                // Se está editando o cardápio que foi excluído, limpa as variáveis
-                if (nomeEstabelecimento === nomeEstabelecimentoOriginal) {
-                    nomeEstabelecimentoOriginal = "";
-                    temaPredefinidoOriginal = "";
-                    itensPendentes = [];
-                    
-                    // Volta para a tela inicial
-                    inicial.classList.remove("hidden");
-                    final.classList.add("hidden");
-                    document.getElementById("nomeEstabelecimento").value = "";
-                    carregarItens();
-                }
-                
                 carregarListaCardapios();
             } else {
                 throw new Error('Erro ao excluir cardápio');
