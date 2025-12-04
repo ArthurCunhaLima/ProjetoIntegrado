@@ -126,7 +126,7 @@ footer {
 .item-preco {
     white-space: nowrap;
     font-weight: bold;
-    background-color: var(--cor-item) !important;
+    background-color: var(--cor-item-preco) !important;
 }
 
 /* Garante que o footer fique no fundo */
