@@ -201,6 +201,8 @@ document.addEventListener("DOMContentLoaded", () => {
             itensCardapio: itensPendentes
         };
 
+
+        console.log("Payload sendo enviado:", JSON.stringify(payload, null, 2));
         try {
             const response = await fetch("https://projetointegrado-kper.onrender.com/creator/atualizarCardapio", {
                 method: "PUT",
