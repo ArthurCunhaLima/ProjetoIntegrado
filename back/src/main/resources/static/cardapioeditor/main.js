@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     let itensPendentes = [];
     let todosCardapios = []; // Array para armazenar todos os cardápios
+    let nomeEstabelecimentoOriginal = "";
+    let temaPredefinidoOriginal = "";
     
     carregarListaCardapios();
     
@@ -179,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
         form.reset();
     });
 
-    // Salvar alterações
+    // Salvar alterações - CORRIGIDO
     document.getElementById("inputFinal").addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -196,13 +198,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // ESTRATÉGIA: Tentar atualizar normalmente primeiro
         const payload = {
             nomeEstabelecimento: nomeEstabelecimento,
-            itensCardapio: itensPendentes
+            itensCardapio: itensPendentes,
+            temaPredefinido: temaPredefinidoOriginal // Mantém o tema original
         };
 
-
-        console.log("Payload sendo enviado:", JSON.stringify(payload, null, 2));
+        console.log("Tentando atualizar cardápio:", JSON.stringify(payload, null, 2));
+        
         try {
             const response = await fetch("https://projetointegrado-kper.onrender.com/creator/atualizarCardapio", {
                 method: "PUT",
@@ -212,27 +216,98 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                throw new Error("Erro na requisição: " + response.status);
+            if (response.ok) {
+                // SUCESSO: O nome não mudou ou o backend aceitou a mudança
+                const result = await response.json();
+                alert("Cardápio atualizado com sucesso!");
+                console.log("Resposta do servidor:", result);
+                
+                // Atualiza o nome original
+                nomeEstabelecimentoOriginal = nomeEstabelecimento;
+                return;
             }
-
-            const result = await response.json();
-            alert("Cardápio atualizado com sucesso!");
-            console.log("Resposta do servidor:", result);
+            
+            // Se deu erro 404, pode ser porque o nome mudou
+            if (response.status === 404) {
+                // ESTRATÉGIA: O nome mudou, precisa recriar o cardápio
+                
+                // Primeiro exclui o cardápio antigo
+                try {
+                    await fetch(`https://projetointegrado-kper.onrender.com/cardapio/config/excluir?nome=${encodeURIComponent(nomeEstabelecimentoOriginal)}`, {
+                        method: 'DELETE'
+                    });
+                    console.log("Cardápio antigo excluído:", nomeEstabelecimentoOriginal);
+                } catch (deleteError) {
+                    console.warn("Não foi possível excluir cardápio antigo:", deleteError);
+                }
+                
+                // Cria um novo cardápio com o novo nome
+                const criarResponse = await fetch("https://projetointegrado-kper.onrender.com/cardapio/config/criar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (criarResponse.ok) {
+                    const result = await criarResponse.json();
+                    alert("Cardápio recriado com sucesso! (Nome alterado)");
+                    console.log("Novo cardápio criado:", result);
+                    
+                    // Atualiza o nome original
+                    nomeEstabelecimentoOriginal = nomeEstabelecimento;
+                    
+                    // Recarrega a lista de cardápios
+                    carregarListaCardapios();
+                } else {
+                    throw new Error("Erro ao criar novo cardápio: " + criarResponse.status);
+                }
+                
+            } else {
+                // Outro tipo de erro
+                const errorText = await response.text();
+                throw new Error(`Erro ${response.status}: ${errorText}`);
+            }
 
         } catch (error) {
             console.error("Erro ao atualizar cardápio:", error);
-            alert("Erro ao atualizar cardápio. Tente novamente.");
+            
+            // Tentar uma abordagem mais simples - criar novo diretamente
+            if (confirm("Não foi possível atualizar o cardápio. Deseja criar um novo cardápio com estes dados?")) {
+                try {
+                    const criarResponse = await fetch("https://projetointegrado-kper.onrender.com/cardapio/config/criar", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (criarResponse.ok) {
+                        alert("Novo cardápio criado com sucesso!");
+                        nomeEstabelecimentoOriginal = nomeEstabelecimento;
+                        carregarListaCardapios();
+                    } else {
+                        throw new Error("Erro ao criar cardápio: " + criarResponse.status);
+                    }
+                } catch (criarError) {
+                    alert("Erro ao criar cardápio: " + criarError.message);
+                }
+            }
         }
     });
 
-    // Função para carregar dados do cardápio
+    // Função para carregar dados do cardápio - CORRIGIDA
     function carregarDadosCardapio(cardapio) {
-        document.getElementById("nomeEstabelecimento").value = cardapio.nomeEstabelecimento || "";
+        // Guarda o nome original E o tema original
+        nomeEstabelecimentoOriginal = cardapio.nomeEstabelecimento || "";
+        temaPredefinidoOriginal = cardapio.temaPredefinido || "";
+        
+        document.getElementById("nomeEstabelecimento").value = nomeEstabelecimentoOriginal;
         
         // Ajuste conforme a estrutura real da sua API
         itensPendentes = cardapio.itensCardapio || cardapio.itens || [];
-        
         
         carregarItens();
     }
@@ -299,7 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
         carregarItens();
     }
     
-    // Função para excluir cardápio
+    // Função para excluir cardápio - CORRIGIDA
     window.excluirCardapio = async function(nomeEstabelecimento) {
         if (!confirm(`Tem certeza que deseja excluir o cardápio "${nomeEstabelecimento}"?`)) {
             return;
@@ -312,6 +387,20 @@ document.addEventListener("DOMContentLoaded", () => {
             
             if (response.ok) {
                 alert('Cardápio excluído com sucesso!');
+                
+                // Se está editando o cardápio que foi excluído, limpa as variáveis
+                if (nomeEstabelecimento === nomeEstabelecimentoOriginal) {
+                    nomeEstabelecimentoOriginal = "";
+                    temaPredefinidoOriginal = "";
+                    itensPendentes = [];
+                    
+                    // Volta para a tela inicial
+                    inicial.classList.remove("hidden");
+                    final.classList.add("hidden");
+                    document.getElementById("nomeEstabelecimento").value = "";
+                    carregarItens();
+                }
+                
                 carregarListaCardapios();
             } else {
                 throw new Error('Erro ao excluir cardápio');
