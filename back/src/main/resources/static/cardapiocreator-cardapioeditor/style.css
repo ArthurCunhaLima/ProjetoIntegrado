@@ -537,7 +537,7 @@ button[type="submit"]:not(:disabled):hover {
     box-shadow: 0 0 0 2px #45a049;
 }
 
-.btn-check:checked + .btn-outline-primary .text-muted {
+.btn-check:checked + .btn-outline-primary .text-muted  {
     color: rgba(255,255,255,0.8) !important;
 }
 
@@ -574,5 +574,4 @@ button[type="submit"]:not(:disabled):hover {
 
 #temaSelector .btn-outline-primary i,
 #temaSelector .btn-outline-primary .bi {
-    color: #4CAF50 !important;
 }
