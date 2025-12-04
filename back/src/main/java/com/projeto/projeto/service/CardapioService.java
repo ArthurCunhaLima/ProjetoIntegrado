@@ -88,10 +88,7 @@ public class CardapioService {
 
         if (cardapioExistenteOpt.isPresent()) {
             Cardapio cardapioExistente = cardapioExistenteOpt.get();
-            cardapioExistente.setHexFundo(cardapio.getHexFundo());
-            cardapioExistente.setHexTexto(cardapio.getHexTexto());
-            cardapioExistente.setHexCorFundoPagina(cardapio.getHexCorFundoPagina());
-            cardapioExistente.setHexCorFundoCard(cardapio.getHexCorFundoCard());
+            cardapioExistente.setNomeEstabelecimento(cardapio.getNomeEstabelecimento());
             cardapioExistente.setItensCardapio(cardapio.getItensCardapio());
             cardapioExistente.setTemaPredefinido(cardapio.getTemaPredefinido());
 
