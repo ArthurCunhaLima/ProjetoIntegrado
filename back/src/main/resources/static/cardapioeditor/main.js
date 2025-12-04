@@ -182,32 +182,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Salvar alterações - CORRIGIDO
-    document.getElementById("inputFinal").addEventListener("submit", async (e) => {
-        e.preventDefault();
+document.getElementById("inputFinal").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        if (itensPendentes.length === 0) {
-            alert("Nenhum item para salvar!");
-            return;
-        }
+    if (itensPendentes.length === 0) {
+        alert("Nenhum item para salvar!");
+        return;
+    }
 
-        const formEstabelecimento = document.getElementById("inputFinal");
-        const nomeEstabelecimento = formEstabelecimento.nomeEstabelecimento.value;
+    const formEstabelecimento = document.getElementById("inputFinal");
+    const nomeEstabelecimento = formEstabelecimento.nomeEstabelecimento.value;
 
-        if (!nomeEstabelecimento) {
-            alert("Nome do estabelecimento é obrigatório!");
-            return;
-        }
+    if (!nomeEstabelecimento) {
+        alert("Nome do estabelecimento é obrigatório!");
+        return;
+    }
 
-        // ESTRATÉGIA: Tentar atualizar normalmente primeiro
-        const payload = {
-            nomeEstabelecimento: nomeEstabelecimento,
-            itensCardapio: itensPendentes,
-            temaPredefinido: temaPredefinidoOriginal // Mantém o tema original
-        };
+    // ESTRATÉGIA: Sempre usar o nome original para buscar no PUT
+    const payload = {
+        nomeEstabelecimento: nomeEstabelecimento, // Novo nome (se mudou)
+        itensCardapio: itensPendentes,
+        temaPredefinido: temaPredefinidoOriginal // Mantém o tema original
+    };
 
-        console.log("Tentando atualizar cardápio:", JSON.stringify(payload, null, 2));
-        
-        try {
+    console.log("Tentando atualizar cardápio:", JSON.stringify(payload, null, 2));
+    
+    try {
+        // Se o nome NÃO mudou, faz PUT normal
+        if (nomeEstabelecimento === nomeEstabelecimentoOriginal) {
             const response = await fetch("https://projetointegrado-kper.onrender.com/creator/atualizarCardapio", {
                 method: "PUT",
                 headers: {
@@ -217,86 +219,58 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (response.ok) {
-                // SUCESSO: O nome não mudou ou o backend aceitou a mudança
                 const result = await response.json();
                 alert("Cardápio atualizado com sucesso!");
                 console.log("Resposta do servidor:", result);
-                
-                // Atualiza o nome original
-                nomeEstabelecimentoOriginal = nomeEstabelecimento;
+                carregarListaCardapios();
                 return;
             }
-            
-            // Se deu erro 404, pode ser porque o nome mudou
-            if (response.status === 404) {
-                // ESTRATÉGIA: O nome mudou, precisa recriar o cardápio
-                
-                // Primeiro exclui o cardápio antigo
-                try {
-                    await fetch(`https://projetointegrado-kper.onrender.com/cardapio/config/excluir?nome=${encodeURIComponent(nomeEstabelecimentoOriginal)}`, {
-                        method: 'DELETE'
-                    });
-                    console.log("Cardápio antigo excluído:", nomeEstabelecimentoOriginal);
-                } catch (deleteError) {
-                    console.warn("Não foi possível excluir cardápio antigo:", deleteError);
-                }
-                
-                // Cria um novo cardápio com o novo nome
-                const criarResponse = await fetch("https://projetointegrado-kper.onrender.com/cardapio/config/criar", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
+        }
+        
+        // Se chegou aqui, é porque o nome MUDOU ou o PUT falhou
+        console.log("Nome mudou ou PUT falhou. Recriando cardápio...");
+        
+        // 1. Primeiro exclui o cardápio antigo (se existir)
+        if (nomeEstabelecimentoOriginal) {
+            try {
+                await fetch(`https://projetointegrado-kper.onrender.com/cardapio/config/excluir?nome=${encodeURIComponent(nomeEstabelecimentoOriginal)}`, {
+                    method: 'DELETE'
                 });
-                
-                if (criarResponse.ok) {
-                    const result = await criarResponse.json();
-                    alert("Cardápio recriado com sucesso! (Nome alterado)");
-                    console.log("Novo cardápio criado:", result);
-                    
-                    // Atualiza o nome original
-                    nomeEstabelecimentoOriginal = nomeEstabelecimento;
-                    
-                    // Recarrega a lista de cardápios
-                    carregarListaCardapios();
-                } else {
-                    throw new Error("Erro ao criar novo cardápio: " + criarResponse.status);
-                }
-                
-            } else {
-                // Outro tipo de erro
-                const errorText = await response.text();
-                throw new Error(`Erro ${response.status}: ${errorText}`);
-            }
-
-        } catch (error) {
-            console.error("Erro ao atualizar cardápio:", error);
-            
-            // Tentar uma abordagem mais simples - criar novo diretamente
-            if (confirm("Não foi possível atualizar o cardápio. Deseja criar um novo cardápio com estes dados?")) {
-                try {
-                    const criarResponse = await fetch("https://projetointegrado-kper.onrender.com/cardapio/config/criar", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (criarResponse.ok) {
-                        alert("Novo cardápio criado com sucesso!");
-                        nomeEstabelecimentoOriginal = nomeEstabelecimento;
-                        carregarListaCardapios();
-                    } else {
-                        throw new Error("Erro ao criar cardápio: " + criarResponse.status);
-                    }
-                } catch (criarError) {
-                    alert("Erro ao criar cardápio: " + criarError.message);
-                }
+                console.log("Cardápio antigo excluído:", nomeEstabelecimentoOriginal);
+            } catch (deleteError) {
+                console.warn("Não foi possível excluir cardápio antigo:", deleteError);
             }
         }
-    });
+        
+        // 2. Cria um novo cardápio com o novo nome
+        const criarResponse = await fetch("https://projetointegrado-kper.onrender.com/cardapio/config/criar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        if (criarResponse.ok) {
+            const result = await criarResponse.json();
+            alert("Cardápio recriado com sucesso! (Nome alterado de '" + nomeEstabelecimentoOriginal + "' para '" + nomeEstabelecimento + "')");
+            console.log("Novo cardápio criado:", result);
+            
+            // Atualiza o nome original para o novo nome
+            nomeEstabelecimentoOriginal = nomeEstabelecimento;
+            
+            // Recarrega a lista de cardápios
+            carregarListaCardapios();
+        } else {
+            const errorText = await criarResponse.text();
+            throw new Error("Erro ao criar novo cardápio: " + errorText);
+        }
+
+    } catch (error) {
+        console.error("Erro ao atualizar/criar cardápio:", error);
+        alert("Erro: " + error.message);
+    }
+});
 
     // Função para carregar dados do cardápio - CORRIGIDA
     function carregarDadosCardapio(cardapio) {
