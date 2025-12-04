@@ -8,7 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const nomeBuscaInput = document.getElementById("nomeBusca");
     
     let itensPendentes = [];
-    let todosCardapios = []; // Array para armazenar todos os cardápios
+    let todosCardapios = [];
+    let cardapioCompleto = {}; // ← GUARDA TODO O OBJETO CARDÁPIO
+    let nomeEstabelecimentoOriginal = "";
+    let temaPredefinidoOriginal = "";
     
     carregarListaCardapios();
     
@@ -39,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             if (response.ok) {
                 const cardapios = await response.json();
-                todosCardapios = cardapios; // Armazena todos os cardápios
+                todosCardapios = cardapios;
                 exibirListaCardapios(cardapios);
             } else {
                 cardapiosList.innerHTML = '<p class="text-muted text-center">Nenhum cardápio disponível</p>';
@@ -55,12 +58,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const termoBusca = nomeBuscaInput.value.trim().toLowerCase();
         
         if (termoBusca === '') {
-            // Se o campo estiver vazio, mostrar todos os cardápios
             exibirListaCardapios(todosCardapios);
             return;
         }
         
-        // Filtrar cardápios que começam com o termo buscado
         const cardapiosFiltrados = todosCardapios.filter(cardapio => 
             cardapio.nomeEstabelecimento.toLowerCase().startsWith(termoBusca)
         );
@@ -100,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
             
-            // Adicionar evento de clique apenas na área do nome
             const cardapioArea = item.querySelector('[data-cardapio-nome]');
             cardapioArea.addEventListener("click", () => {
                 carregarCardapioParaEdicao(cardapio);
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         carregarDadosCardapio(cardapio);
     }
     
-    // Buscar cardápio específico (para o formulário de submit)
+    // Buscar cardápio específico
     formulario.addEventListener("submit", async function(event) {
         event.preventDefault();
         
@@ -129,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Apenas filtrar a lista, não redirecionar
         filtrarCardapios();
     });
     
@@ -146,7 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
         inicial.classList.remove("hidden");
         nomeBuscaInput.value = "";
         nomeBuscaInput.focus();
-        // Recarregar lista completa
         exibirListaCardapios(todosCardapios);
     });
     
@@ -161,7 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
             descricao: form.descricao.value
         };
 
-        // Validações
         if (!dados.nome || !dados.valor) {
             alert("Nome e valor são obrigatórios!");
             return;
@@ -179,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
         form.reset();
     });
 
-    // Salvar alterações
+    // SALVAR ALTERAÇÕES - SOLUÇÃO 3 (envia todos os campos)
     document.getElementById("inputFinal").addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -188,19 +185,28 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const formEstabelecimento = document.getElementById("inputFinal");
-        const nomeEstabelecimento = formEstabelecimento.nomeEstabelecimento.value;
+        const nomeEstabelecimento = document.getElementById("nomeEstabelecimento").value;
 
         if (!nomeEstabelecimento) {
             alert("Nome do estabelecimento é obrigatório!");
             return;
         }
 
+        // Reutiliza TODOS os campos do cardápio original
         const payload = {
-            nomeEstabelecimento: nomeEstabelecimento,
-            itensCardapio: itensPendentes
+            id: cardapioCompleto.id || 0,
+            hexFundo: cardapioCompleto.hexFundo || "",
+            hexTexto: cardapioCompleto.hexTexto || "",
+            url: cardapioCompleto.url || "",
+            nomeEstabelecimento: nomeEstabelecimento, // ← Apenas este campo muda
+            hexCorFundoPagina: cardapioCompleto.hexCorFundoPagina || "",
+            hexCorFundoCard: cardapioCompleto.hexCorFundoCard || "",
+            itensCardapio: itensPendentes,
+            temaPredefinido: temaPredefinidoOriginal // ← Mantém o tema original
         };
 
+        console.log("Enviando payload completo:", JSON.stringify(payload, null, 2));
+        
         try {
             const response = await fetch("https://projetointegrado-kper.onrender.com/creator/atualizarCardapio", {
                 method: "PUT",
@@ -211,27 +217,38 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (!response.ok) {
-                throw new Error("Erro na requisição: " + response.status);
+                const errorText = await response.text();
+                throw new Error(`Erro ${response.status}: ${errorText}`);
             }
 
             const result = await response.json();
             alert("Cardápio atualizado com sucesso!");
             console.log("Resposta do servidor:", result);
+            
+            // Atualiza o objeto completo com a resposta do servidor
+            cardapioCompleto = result;
+            nomeEstabelecimentoOriginal = nomeEstabelecimento;
+            temaPredefinidoOriginal = result.temaPredefinido || temaPredefinidoOriginal;
+            
+            // Recarrega a lista de cardápios para mostrar as mudanças
+            carregarListaCardapios();
 
         } catch (error) {
             console.error("Erro ao atualizar cardápio:", error);
-            alert("Erro ao atualizar cardápio. Tente novamente.");
+            alert("Erro ao atualizar cardápio: " + error.message);
         }
     });
 
-    // Função para carregar dados do cardápio
+    // Função para carregar dados do cardápio - ATUALIZADA
     function carregarDadosCardapio(cardapio) {
-        document.getElementById("nomeEstabelecimento").value = cardapio.nomeEstabelecimento || "";
+        // Guarda TODO o objeto cardápio
+        cardapioCompleto = cardapio;
+        nomeEstabelecimentoOriginal = cardapio.nomeEstabelecimento || "";
+        temaPredefinidoOriginal = cardapio.temaPredefinido || "";
         
-        // Ajuste conforme a estrutura real da sua API
+        document.getElementById("nomeEstabelecimento").value = nomeEstabelecimentoOriginal;
+        
         itensPendentes = cardapio.itensCardapio || cardapio.itens || [];
-        
-        
         carregarItens();
     }
     
@@ -255,7 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const itemElement = document.createElement("div");
             itemElement.className = "item-card";
             
-            // Adicionar animação
             itemElement.style.opacity = "0";
             itemElement.style.transform = "translateY(20px)";
             
@@ -297,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
         carregarItens();
     }
     
-    // Função para excluir cardápio
+    // Função para excluir cardápio - ATUALIZADA
     window.excluirCardapio = async function(nomeEstabelecimento) {
         if (!confirm(`Tem certeza que deseja excluir o cardápio "${nomeEstabelecimento}"?`)) {
             return;
@@ -310,6 +326,21 @@ document.addEventListener("DOMContentLoaded", () => {
             
             if (response.ok) {
                 alert('Cardápio excluído com sucesso!');
+                
+                // Se está editando o cardápio que foi excluído, limpa tudo
+                if (nomeEstabelecimento === nomeEstabelecimentoOriginal) {
+                    cardapioCompleto = {};
+                    nomeEstabelecimentoOriginal = "";
+                    temaPredefinidoOriginal = "";
+                    itensPendentes = [];
+                    
+                    // Volta para a tela inicial
+                    inicial.classList.remove("hidden");
+                    final.classList.add("hidden");
+                    document.getElementById("nomeEstabelecimento").value = "";
+                    carregarItens();
+                }
+                
                 carregarListaCardapios();
             } else {
                 throw new Error('Erro ao excluir cardápio');
@@ -332,7 +363,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-    
 
     carregarItens();
 });
