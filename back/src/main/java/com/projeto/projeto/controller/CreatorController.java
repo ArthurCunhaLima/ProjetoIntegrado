@@ -21,7 +21,7 @@ public class CreatorController {
     }
 
 
-    @GetMapping("/home")
+    @GetMapping("")
     public String homePage(){
         return "home/index";
     }
